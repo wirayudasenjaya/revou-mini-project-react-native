@@ -14,15 +14,15 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-MobileApp1-MobileApp1Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-MobileApp1-MobileApp1Tests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		AC150E27EB9B4DC9B472FCC6 /* NotoSansJP-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8109703F5CC546418B7FB6E2 /* NotoSansJP-Black.ttf */; };
-		F95927150FB54F1DA3B9AE2F /* NotoSansJP-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C9A57CB822A42EF83DC7D10 /* NotoSansJP-Bold.ttf */; };
-		353870067418471AA3A3C650 /* NotoSansJP-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 32E7D22C87254D0795EC6B82 /* NotoSansJP-ExtraBold.ttf */; };
-		35F5E7A625D04A439E658909 /* NotoSansJP-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 49193B257C42409A88D7BE5B /* NotoSansJP-ExtraLight.ttf */; };
-		F3678C54FBA14692AC763982 /* NotoSansJP-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F2B5F909AF644B06A36496E5 /* NotoSansJP-Light.ttf */; };
-		D03E0EFFFFA248F0810A283D /* NotoSansJP-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9B4B7CADA6DF4AA595187DEB /* NotoSansJP-Medium.ttf */; };
-		66157C6E9D3D47BF807E4CB2 /* NotoSansJP-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 60295945D6CD4130964104AB /* NotoSansJP-Regular.ttf */; };
-		7545DA20C08F4D2D925E40AF /* NotoSansJP-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 57D5B5B1DCF8415D87563C6D /* NotoSansJP-SemiBold.ttf */; };
-		E770A50BF529422E80E7C7F3 /* NotoSansJP-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1F9F5F7AD73A4C8AA158B430 /* NotoSansJP-Thin.ttf */; };
+		BF4995AE08574286A4082AE0 /* Inter-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0DC1C0896420435584A37931 /* Inter-Black.ttf */; };
+		A9DDB547817E4D3BAA0BC4BD /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F3039DA36F944D079B21797C /* Inter-Bold.ttf */; };
+		035AED4CC03E42679873038F /* Inter-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 495360EE5B124286857C20E9 /* Inter-ExtraBold.ttf */; };
+		FCAB150B7E124DEE8173BE14 /* Inter-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2DADDC9FBC384F5D9373B1DB /* Inter-ExtraLight.ttf */; };
+		9373C02B00CF49CAAFD5B24F /* Inter-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4349FFABCBD4E76B59501F8 /* Inter-Light.ttf */; };
+		FB310EA2B0CB455A9513DCCE /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0CE908AF5BA54D5198805915 /* Inter-Medium.ttf */; };
+		B2C0FE4EA4AE403086C6197E /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 21473AAD155647919F2221F3 /* Inter-Regular.ttf */; };
+		0463A60481DD4239A6024886 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CD130503D43B46FEBA95321A /* Inter-SemiBold.ttf */; };
+		0D1A17CC0A394F759FD46F1E /* Inter-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9499A9FC787C401BB8CFB2FA /* Inter-Thin.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,15 +54,15 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MobileApp1/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-MobileApp1-MobileApp1Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileApp1-MobileApp1Tests.release.xcconfig"; path = "Target Support Files/Pods-MobileApp1-MobileApp1Tests/Pods-MobileApp1-MobileApp1Tests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		8109703F5CC546418B7FB6E2 /* NotoSansJP-Black.ttf */ = {isa = PBXFileReference; name = "NotoSansJP-Black.ttf"; path = "../assets/fonts/NotoSansJP-Black.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		4C9A57CB822A42EF83DC7D10 /* NotoSansJP-Bold.ttf */ = {isa = PBXFileReference; name = "NotoSansJP-Bold.ttf"; path = "../assets/fonts/NotoSansJP-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		32E7D22C87254D0795EC6B82 /* NotoSansJP-ExtraBold.ttf */ = {isa = PBXFileReference; name = "NotoSansJP-ExtraBold.ttf"; path = "../assets/fonts/NotoSansJP-ExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		49193B257C42409A88D7BE5B /* NotoSansJP-ExtraLight.ttf */ = {isa = PBXFileReference; name = "NotoSansJP-ExtraLight.ttf"; path = "../assets/fonts/NotoSansJP-ExtraLight.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		F2B5F909AF644B06A36496E5 /* NotoSansJP-Light.ttf */ = {isa = PBXFileReference; name = "NotoSansJP-Light.ttf"; path = "../assets/fonts/NotoSansJP-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		9B4B7CADA6DF4AA595187DEB /* NotoSansJP-Medium.ttf */ = {isa = PBXFileReference; name = "NotoSansJP-Medium.ttf"; path = "../assets/fonts/NotoSansJP-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		60295945D6CD4130964104AB /* NotoSansJP-Regular.ttf */ = {isa = PBXFileReference; name = "NotoSansJP-Regular.ttf"; path = "../assets/fonts/NotoSansJP-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		57D5B5B1DCF8415D87563C6D /* NotoSansJP-SemiBold.ttf */ = {isa = PBXFileReference; name = "NotoSansJP-SemiBold.ttf"; path = "../assets/fonts/NotoSansJP-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		1F9F5F7AD73A4C8AA158B430 /* NotoSansJP-Thin.ttf */ = {isa = PBXFileReference; name = "NotoSansJP-Thin.ttf"; path = "../assets/fonts/NotoSansJP-Thin.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		0DC1C0896420435584A37931 /* Inter-Black.ttf */ = {isa = PBXFileReference; name = "Inter-Black.ttf"; path = "../assets/fonts/Inter-Black.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F3039DA36F944D079B21797C /* Inter-Bold.ttf */ = {isa = PBXFileReference; name = "Inter-Bold.ttf"; path = "../assets/fonts/Inter-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		495360EE5B124286857C20E9 /* Inter-ExtraBold.ttf */ = {isa = PBXFileReference; name = "Inter-ExtraBold.ttf"; path = "../assets/fonts/Inter-ExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		2DADDC9FBC384F5D9373B1DB /* Inter-ExtraLight.ttf */ = {isa = PBXFileReference; name = "Inter-ExtraLight.ttf"; path = "../assets/fonts/Inter-ExtraLight.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		B4349FFABCBD4E76B59501F8 /* Inter-Light.ttf */ = {isa = PBXFileReference; name = "Inter-Light.ttf"; path = "../assets/fonts/Inter-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		0CE908AF5BA54D5198805915 /* Inter-Medium.ttf */ = {isa = PBXFileReference; name = "Inter-Medium.ttf"; path = "../assets/fonts/Inter-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		21473AAD155647919F2221F3 /* Inter-Regular.ttf */ = {isa = PBXFileReference; name = "Inter-Regular.ttf"; path = "../assets/fonts/Inter-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		CD130503D43B46FEBA95321A /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; name = "Inter-SemiBold.ttf"; path = "../assets/fonts/Inter-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		9499A9FC787C401BB8CFB2FA /* Inter-Thin.ttf */ = {isa = PBXFileReference; name = "Inter-Thin.ttf"; path = "../assets/fonts/Inter-Thin.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,15 +172,15 @@
 		D335D4F43E564B0B94D383B7 /* Resources */ = {
 			isa = "PBXGroup";
 			children = (
-				8109703F5CC546418B7FB6E2 /* NotoSansJP-Black.ttf */,
-				4C9A57CB822A42EF83DC7D10 /* NotoSansJP-Bold.ttf */,
-				32E7D22C87254D0795EC6B82 /* NotoSansJP-ExtraBold.ttf */,
-				49193B257C42409A88D7BE5B /* NotoSansJP-ExtraLight.ttf */,
-				F2B5F909AF644B06A36496E5 /* NotoSansJP-Light.ttf */,
-				9B4B7CADA6DF4AA595187DEB /* NotoSansJP-Medium.ttf */,
-				60295945D6CD4130964104AB /* NotoSansJP-Regular.ttf */,
-				57D5B5B1DCF8415D87563C6D /* NotoSansJP-SemiBold.ttf */,
-				1F9F5F7AD73A4C8AA158B430 /* NotoSansJP-Thin.ttf */,
+				0DC1C0896420435584A37931 /* Inter-Black.ttf */,
+				F3039DA36F944D079B21797C /* Inter-Bold.ttf */,
+				495360EE5B124286857C20E9 /* Inter-ExtraBold.ttf */,
+				2DADDC9FBC384F5D9373B1DB /* Inter-ExtraLight.ttf */,
+				B4349FFABCBD4E76B59501F8 /* Inter-Light.ttf */,
+				0CE908AF5BA54D5198805915 /* Inter-Medium.ttf */,
+				21473AAD155647919F2221F3 /* Inter-Regular.ttf */,
+				CD130503D43B46FEBA95321A /* Inter-SemiBold.ttf */,
+				9499A9FC787C401BB8CFB2FA /* Inter-Thin.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -281,15 +281,15 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				AC150E27EB9B4DC9B472FCC6 /* NotoSansJP-Black.ttf in Resources */,
-				F95927150FB54F1DA3B9AE2F /* NotoSansJP-Bold.ttf in Resources */,
-				353870067418471AA3A3C650 /* NotoSansJP-ExtraBold.ttf in Resources */,
-				35F5E7A625D04A439E658909 /* NotoSansJP-ExtraLight.ttf in Resources */,
-				F3678C54FBA14692AC763982 /* NotoSansJP-Light.ttf in Resources */,
-				D03E0EFFFFA248F0810A283D /* NotoSansJP-Medium.ttf in Resources */,
-				66157C6E9D3D47BF807E4CB2 /* NotoSansJP-Regular.ttf in Resources */,
-				7545DA20C08F4D2D925E40AF /* NotoSansJP-SemiBold.ttf in Resources */,
-				E770A50BF529422E80E7C7F3 /* NotoSansJP-Thin.ttf in Resources */,
+				BF4995AE08574286A4082AE0 /* Inter-Black.ttf in Resources */,
+				A9DDB547817E4D3BAA0BC4BD /* Inter-Bold.ttf in Resources */,
+				035AED4CC03E42679873038F /* Inter-ExtraBold.ttf in Resources */,
+				FCAB150B7E124DEE8173BE14 /* Inter-ExtraLight.ttf in Resources */,
+				9373C02B00CF49CAAFD5B24F /* Inter-Light.ttf in Resources */,
+				FB310EA2B0CB455A9513DCCE /* Inter-Medium.ttf in Resources */,
+				B2C0FE4EA4AE403086C6197E /* Inter-Regular.ttf in Resources */,
+				0463A60481DD4239A6024886 /* Inter-SemiBold.ttf in Resources */,
+				0D1A17CC0A394F759FD46F1E /* Inter-Thin.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,5 +1,6 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {SafeAreaView, ScrollView, TextInput, View} from 'react-native';
 
 import Typography from './src/components/Typography';
@@ -8,11 +9,19 @@ import colors from './src/components/constants/colors';
 import ArrowCircleLeft from './src/components/atom/Icon/ArrowCircleLeft';
 import Icon from './src/components/atom/Icon/Icon';
 import TextField from './src/components/molecules/TextInput';
+import OnboardingScreen from './src/screens/OnboardingScreen';
 
 function App(): React.JSX.Element {
+  const Stack = createNativeStackNavigator();
+
   return (
     <NavigationContainer>
-      <SafeAreaView>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={OnboardingScreen} options={{
+          headerShown: false
+        }} />
+      </Stack.Navigator>
+      {/* <SafeAreaView>
         <ScrollView contentContainerStyle={{ padding: 10}}>
         <Typography type="heading" size="xxlarge">
           Heading XXLarge
@@ -127,7 +136,7 @@ function App(): React.JSX.Element {
           placeholder="Disabled"
         />
         </ScrollView>
-      </SafeAreaView>
+      </SafeAreaView> */}
     </NavigationContainer>
   );
 }

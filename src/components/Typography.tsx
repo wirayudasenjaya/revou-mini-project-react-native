@@ -63,45 +63,45 @@ export default function Typography({ size, type, children, style }: TypographyPr
 const styles = StyleSheet.create({
   headingXXLarge: {
     fontSize: 28,
-    fontWeight: '600',
+    fontWeight: '700',
     lineHeight: 36,
-    fontFamily: 'NotoSansJP-Bold'
+    fontFamily: 'Inter-Bold'
   },
   headingXLarge: {
     fontSize: 24,
-    fontWeight: '600',
+    fontWeight: '700',
     lineHeight: 32,
-    fontFamily: 'NotoSansJP-Bold'
+    fontFamily: 'Inter-Bold'
   },
   headingLarge: {
     fontSize: 20,
-    fontWeight: '600',
+    fontWeight: '700',
     lineHeight: 28,
-    fontFamily: 'NotoSansJP-Bold'
+    fontFamily: 'Inter-Bold'
   },
   headingMedium: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '700',
     lineHeight: 24,
-    fontFamily: 'NotoSansJP-Bold'
+    fontFamily: 'Inter-Bold'
   },
   headingSmall: {
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '700',
     lineHeight: 22,
-    fontFamily: 'NotoSansJP-Bold'
+    fontFamily: 'Inter-Bold'
   },
   headingXSmall: {
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '700',
     lineHeight: 20,
-    fontFamily: 'NotoSansJP-Bold'
+    fontFamily: 'Inter-Bold'
   },
   headingXXSmall: {
     fontSize: 10,
-    fontWeight: '600',
+    fontWeight: '700',
     lineHeight: 18,
-    fontFamily: 'NotoSansJP-Bold'
+    fontFamily: 'Inter-Bold'
   },
   paragraphLarge: {
     fontSize: 16,
@@ -112,48 +112,48 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'regular',
     lineHeight: 22,
-    fontFamily: 'NotoSansJP-Regular'
+    fontFamily: 'Inter-Regular'
   },
   paragraphSmall: {
     fontSize: 12,
     fontWeight: 'regular',
     lineHeight: 20,
-    fontFamily: 'NotoSansJP-Regular'
+    fontFamily: 'Inter-Regular'
   },
   paragraphXSmall: {
     fontSize: 10,
     fontWeight: 'regular',
     lineHeight: 18,
-    fontFamily: 'NotoSansJP-Regular'
+    fontFamily: 'Inter-Regular'
   },
   specialLarge: {
     fontSize: 16,
     fontStyle: 'italic',
     lineHeight: 24,
-    fontFamily: 'NotoSansJP-Regular'
+    fontFamily: 'Inter-Regular'
   },
   specialMedium: {
     fontSize: 14,
     fontStyle: 'italic',
     lineHeight: 22,
-    fontFamily: 'NotoSansJP-Regular'
+    fontFamily: 'Inter-Regular'
   },
   specialSmall: {
     fontSize: 12,
     fontStyle: 'italic',
     lineHeight: 20,
-    fontFamily: 'NotoSansJP-Regular'
+    fontFamily: 'Inter-Regular'
   },
   specialXSmall: {
     fontSize: 10,
     fontStyle: 'italic',
     lineHeight: 18,
-    fontFamily: 'NotoSansJP-Regular'
+    fontFamily: 'Inter-Regular'
   },
   specialXXSmall: {
     fontSize: 8,
     fontStyle: 'italic',
     lineHeight: 12,
-    fontFamily: 'NotoSansJP-Regular'
+    fontFamily: 'Inter-Regular'
   },
 });

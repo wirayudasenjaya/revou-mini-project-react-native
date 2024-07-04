@@ -9,6 +9,7 @@ type ButtonProps = {
   disabled: boolean;
   icon?: React.ReactNode;
   children: React.ReactNode;
+  onPress: any;
 };
 
 export default function Button({
@@ -18,6 +19,7 @@ export default function Button({
   disabled,
   icon,
   children,
+  onPress
 }: ButtonProps) {
   const getButtonStyle = () => {
     let buttonStyle = {};
@@ -102,6 +104,7 @@ export default function Button({
         disabled && styles.disabled,
       ]}
       disabled={disabled}
+      onPress={onPress}
     >
       {buttonChild()}
     </TouchableOpacity>

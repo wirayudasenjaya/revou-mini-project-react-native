@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   },
   inputText: {
     fontSize: 14,
-    fontFamily: 'NotoSansJP-Regular',
+    fontFamily: 'Inter-Regular',
     padding: 0,
     height: 40,
     flex: 1,

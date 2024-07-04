@@ -2,40 +2,40 @@
   "migIndex": 1,
   "data": [
     {
-      "path": "assets/fonts/NotoSansJP-Black.ttf",
-      "sha1": "77a9184666033f4a945ecbe01a8b7f20b8ecb18a"
+      "path": "assets/fonts/Inter-Black.ttf",
+      "sha1": "f79fa58ace5f55e338c99bf71e7e0702841df6f2"
     },
     {
-      "path": "assets/fonts/NotoSansJP-Bold.ttf",
-      "sha1": "2c104ea6ee8cbc919f3338210f361f05f4882dd2"
+      "path": "assets/fonts/Inter-Bold.ttf",
+      "sha1": "47ff07c75746682133b81e7ac0537ce50a4c9916"
     },
     {
-      "path": "assets/fonts/NotoSansJP-ExtraBold.ttf",
-      "sha1": "57120be4e805c23ca80d4939f347c51a569d7140"
+      "path": "assets/fonts/Inter-ExtraBold.ttf",
+      "sha1": "c9b3d2f2449ab2c67ff075f806973fa3d7e104b3"
     },
     {
-      "path": "assets/fonts/NotoSansJP-ExtraLight.ttf",
-      "sha1": "739f53b106d4a326bb494f9d92b2e977f9cff837"
+      "path": "assets/fonts/Inter-ExtraLight.ttf",
+      "sha1": "f78ee1d6cbfc64f656247c604ef270ef116abbf5"
     },
     {
-      "path": "assets/fonts/NotoSansJP-Light.ttf",
-      "sha1": "477cc6a59378f3880dbf75c97d0159284a506e7d"
+      "path": "assets/fonts/Inter-Light.ttf",
+      "sha1": "cbb2506d8da21edbb2dc8cfa26e3b42a97d138f8"
     },
     {
-      "path": "assets/fonts/NotoSansJP-Medium.ttf",
-      "sha1": "07ce11b5f8c64155d30fcdbf849b82e3840cb53c"
+      "path": "assets/fonts/Inter-Medium.ttf",
+      "sha1": "e76f580811e031813e7150131a0724811cdd737a"
     },
     {
-      "path": "assets/fonts/NotoSansJP-Regular.ttf",
-      "sha1": "6030f4e7d59b356d0eaf26f1bca370a999335058"
+      "path": "assets/fonts/Inter-Regular.ttf",
+      "sha1": "cfa780d0b50b2bb7eacb82984f1b18a95aaa40c5"
     },
     {
-      "path": "assets/fonts/NotoSansJP-SemiBold.ttf",
-      "sha1": "e0bd2d88e0fc957ec65370db7b45638c75b0db93"
+      "path": "assets/fonts/Inter-SemiBold.ttf",
+      "sha1": "5e0c44e57e7e090252d79f622899e67585bb892c"
     },
     {
-      "path": "assets/fonts/NotoSansJP-Thin.ttf",
-      "sha1": "842fce6366edd597b3338d8b760544b09c27990f"
+      "path": "assets/fonts/Inter-Thin.ttf",
+      "sha1": "757805e615c974756646e54ceff8e409d5c47207"
     }
   ]
 }
