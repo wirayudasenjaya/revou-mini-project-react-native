@@ -107,6 +107,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'regular',
     lineHeight: 24,
+    fontFamily: 'Inter-Regular'
   },
   paragraphMedium: {
     fontSize: 14,

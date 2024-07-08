@@ -114,20 +114,21 @@ export default function Button({
 const styles = StyleSheet.create({
   primary: {
     backgroundColor: colors.purple600,
-    borderRadius: 15,
+    borderRadius: 32,
   },
   outline: {
     borderColor: colors.purple600,
     borderWidth: 2,
-    borderRadius: 15,
+    borderRadius: 32,
     backgroundColor: 'transparent',
   },
   tertiary: {
     backgroundColor: colors.neutral300,
-    borderRadius: 15,
+    borderRadius: 32,
   },
   link: {
     backgroundColor: 'transparent',
+    padding: 0,
   },
   large: {
     paddingVertical: 12,

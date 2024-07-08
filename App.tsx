@@ -10,6 +10,7 @@ import ArrowCircleLeft from './src/components/atom/Icon/ArrowCircleLeft';
 import Icon from './src/components/atom/Icon/Icon';
 import TextField from './src/components/molecules/TextInput';
 import OnboardingScreen from './src/screens/OnboardingScreen';
+import LoginScreen from './src/screens/LoginScreen';
 
 function App(): React.JSX.Element {
   const Stack = createNativeStackNavigator();
@@ -18,6 +19,9 @@ function App(): React.JSX.Element {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Home" component={OnboardingScreen} options={{
+          headerShown: false
+        }} />
+        <Stack.Screen name="Login" component={LoginScreen} options={{
           headerShown: false
         }} />
       </Stack.Navigator>

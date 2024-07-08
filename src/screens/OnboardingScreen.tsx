@@ -1,16 +1,17 @@
 import {useRef, useState} from 'react';
-import {SafeAreaView, Image, Dimensions, View, FlatList} from 'react-native';
+import {SafeAreaView, Image, Dimensions, View, FlatList, StyleSheet} from 'react-native';
 
 import Typography from '../components/Typography';
 import colors from '../components/constants/colors';
 import Button from '../components/molecules/Button';
-import {sizeRatio} from '../utils/utils';
+import {widthSize, heightSize} from '../utils/utils';
 
-export default function OnboardingScreen() {
-  const screenWidth = Dimensions.get('screen').width;
-  const screenHeight = Dimensions.get('screen').height;
-  const windowWidth = Dimensions.get('window').width;
-  const windowHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get('screen').width;
+const screenHeight = Dimensions.get('screen').height;
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+
+export default function OnboardingScreen({ navigation }) {
   const flatListRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -31,19 +32,19 @@ export default function OnboardingScreen() {
       image: require('../../assets/images/Invest.png'),
       title: 'Invest',
       description:
-        'Atur portfolio kamu dan langsung\mberinvestasi dengan mudah dengan\nberagam pilihan aset ',
+        'Atur portfolio kamu dan langsungmberinvestasi dengan mudah dengan\nberagam pilihan aset ',
     },
   ];
 
   const handleNext = () => {
     if (currentIndex < data.length - 1) {
-      flatListRef.current.scrollToIndex({
+      flatListRef.current?.scrollToIndex({
         animated: true,
         index: currentIndex + 1,
       });
       setCurrentIndex(currentIndex + 1);
     } else {
-      console.log('OKEH');
+      navigation.navigate('Login');
     }
   };
 
@@ -53,10 +54,7 @@ export default function OnboardingScreen() {
 
   return (
     <SafeAreaView
-      style={{
-        height: screenHeight,
-        backgroundColor: 'white',
-      }}>
+      style={styles.mainBackground}>
       <FlatList
         ref={flatListRef}
         data={data}
@@ -65,34 +63,28 @@ export default function OnboardingScreen() {
         decelerationRate={'fast'}
         snapToInterval={windowWidth}
         onMomentumScrollEnd={handleOnMomentumEnd}
-        renderItem={({item, index}) => (
+        renderItem={({item}) => (
           <View
-            style={{
-              width: screenWidth,
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              paddingHorizontal: sizeRatio(20),
-            }}>
+            style={styles.contentContainer}>
             <Image
-              style={{
-                width: sizeRatio(240),
-                height: sizeRatio(240),
-              }}
+              style={styles.image}
               source={item.image}
             />
-            <View style={{marginVertical: sizeRatio(8)}} />
-            <Typography type="heading" size="xlarge">
+            <View style={styles.contentGap} />
+            <Typography
+              type="heading"
+              size="xlarge"
+              style={{color: colors.neutral700}}>
               {item.title}
             </Typography>
-            <View style={{marginVertical: sizeRatio(8)}} />
+            <View style={styles.contentGap} />
             <Typography
               type="paragraph"
               size="medium"
-              style={{textAlign: 'center'}}>
+              style={{textAlign: 'center', color: colors.neutral700}}>
               {item.description}
             </Typography>
-            <View style={{marginVertical: sizeRatio(13)}} />
+            <View style={{marginVertical: heightSize(13)}} />
             <View
               style={{
                 flexDirection: 'row',
@@ -108,14 +100,14 @@ export default function OnboardingScreen() {
                         ? colors.purple600
                         : colors.purple100,
                     width:
-                      index === currentIndex ? sizeRatio(16) : sizeRatio(8),
-                    height: sizeRatio(8),
+                      index === currentIndex ? 16 : 8,
+                    height: 8,
                     borderRadius: 50,
                   }}
                 />
               ))}
             </View>
-            <View style={{marginVertical: sizeRatio(42)}} />
+            <View style={{marginVertical: heightSize(42)}} />
             <View style={{width: '100%'}}>
               <Button
                 variant="primary"
@@ -138,3 +130,24 @@ export default function OnboardingScreen() {
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  mainBackground: {
+    height: screenHeight,
+    backgroundColor: 'white',
+  },
+  contentContainer: {
+    width: screenWidth,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: widthSize(20),
+  },
+  image: {
+    width: widthSize(240),
+    height: widthSize(240),
+  },
+  contentGap: {
+    marginVertical: heightSize(8)
+  }
+})

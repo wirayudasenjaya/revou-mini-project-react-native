@@ -46,7 +46,7 @@ type Colors = Record<
 
 const colors: Colors = {
   purple700: '#3737C4',
-  purple600: '#4434EF',
+  purple600: '#4343EF',
   purple500: '#6565F2',
   purple400: '#7878F5',
   purple300: '#A9A9F8',
@@ -80,7 +80,7 @@ const colors: Colors = {
   red300: '#F8A9C3',
   red200: '#FBCADA',
   red100: '#FDECF2',
-  neutral700: '#3A3842',
+  neutral700: '#383842',
   neutral600: '#68686F',
   neutral500: '#919196',
   neutral400: '#BABABD',

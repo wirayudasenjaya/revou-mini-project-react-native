@@ -1,22 +1,19 @@
-import {useState} from 'react';
-import {StyleSheet, TextInput, View, TouchableOpacity} from 'react-native';
+import { useState } from 'react';
+import { StyleSheet, TextInput, View, TouchableOpacity } from 'react-native';
 import colors from '../constants/colors';
 import Typography from '../Typography';
 import Icon from '../atom/Icon/Icon';
 
 type TextInputProps = {
-  state:
-    | 'default'
-    | 'positive'
-    | 'negative'
-    | 'focused'
-    | 'default-no-label'
-    | 'disabled';
-  type: 'text' | 'password';
+  state: 'default' | 'positive' | 'negative' | 'focused' | 'default-no-label' | 'disabled';
+  type: 'text' | 'email' | 'password';
   visible?: boolean;
   label?: string;
   placeholder?: string;
   message?: string;
+  value: string;
+  onChangeText: (text: string) => void;
+  onBlur: () => void;
 };
 
 export default function TextField({
@@ -26,6 +23,9 @@ export default function TextField({
   label,
   placeholder,
   message,
+  value,
+  onChangeText,
+  onBlur,
 }: TextInputProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -64,10 +64,7 @@ export default function TextField({
 
   return (
     <View>
-      <Typography
-        type="heading"
-        size="small"
-        style={[styles.label, getTextStyleByState()]}>
+      <Typography type="heading" size="small" style={styles.label}>
         {label}
       </Typography>
       <View style={[styles.inputTextContainer, getStyleByState()]}>
@@ -77,11 +74,12 @@ export default function TextField({
           placeholder={placeholder}
           placeholderTextColor={colors.neutral500}
           style={[styles.inputText, getTextStyleByState()]}
-          onFocus={() => {
-            setIsFocused(true);
-          }}
+          value={value}
+          onChangeText={onChangeText}
+          onFocus={() => setIsFocused(true)}
           onBlur={() => {
             setIsFocused(false);
+            onBlur();
           }}
         />
         {type === 'password' && (
@@ -102,6 +100,7 @@ export default function TextField({
 const styles = StyleSheet.create({
   label: {
     paddingBottom: 8,
+    color: colors.neutral700,
   },
   message: {
     color: colors.red500,
@@ -124,7 +123,7 @@ const styles = StyleSheet.create({
   },
   inputTextContainerDefault: {
     borderColor: colors.neutral300,
-    backgroundColor: colors.neutral100,
+    backgroundColor: colors.neutral200,
   },
   inputTextContainerPositive: {
     borderColor: colors.green500,
