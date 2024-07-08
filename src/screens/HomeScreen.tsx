@@ -16,6 +16,7 @@ import TextField from '../components/molecules/TextInput';
 import Avatar from '../components/molecules/Avatar';
 import Icon from '../components/atom/Icon/Icon';
 import NewsFeed from '../components/organisms/NewsFeed';
+import Button from '../components/molecules/Button';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -48,7 +49,10 @@ export default function HomeScreen({navigation}) {
                 isActive ? styles.activeTab : styles.inactiveTab,
               ]}
               onPress={() => setIndex(i)}>
-              <Typography type="heading" size="small" style={{color: colors.neutral700}}>
+              <Typography
+                type="heading"
+                size="small"
+                style={{color: colors.neutral700}}>
                 {route.title}
               </Typography>
             </TouchableOpacity>
@@ -69,30 +73,45 @@ export default function HomeScreen({navigation}) {
                 state="default-no-label"
                 type="text"
                 placeholder="Apa yang ingin kamu tanyakan?"
+                value=""
                 onChangeText={() => {}}
                 onBlur={() => {}}
               />
             </View>
           </View>
           <View style={styles.cardBottomContent}>
-            <View style={styles.cardBottomButton}>
-              <Icon name="question-circle" fill={colors.yellow600} />
-              <Typography
-                type="heading"
-                size="xsmall"
-                style={{color: colors.neutral700}}>
-                Pertanyaan
-              </Typography>
+            <View style={{ width: '40%'}}>
+              <Button
+                type="icon-left"
+                variant="link"
+                size="small"
+                disabled={false}
+                onPress={() => {}}>
+                <Icon name="question-circle" fill={colors.yellow600} />
+                <Typography
+                  type="heading"
+                  size="xsmall"
+                  style={{color: colors.neutral700}}>
+                  Pertanyaan
+                </Typography>
+              </Button>
             </View>
             <View style={styles.verticalDivider} />
-            <View style={styles.cardBottomButton}>
-              <Icon name="plus" fill={colors.green600} />
-              <Typography
-                type="heading"
-                size="xsmall"
-                style={{color: colors.neutral700}}>
-                Post
-              </Typography>
+            <View style={{width: '40%'}}>
+              <Button
+                type="icon-left"
+                variant="link"
+                size="small"
+                disabled={false}
+                onPress={() => {}}>
+                <Icon name="plus" fill={colors.green600} />
+                <Typography
+                  type="heading"
+                  size="xsmall"
+                  style={{color: colors.neutral700}}>
+                  Post
+                </Typography>
+              </Button>
             </View>
           </View>
         </View>
@@ -127,14 +146,8 @@ const styles = StyleSheet.create({
   cardBottomContent: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginTop: heightSize(16),
-  },
-  cardBottomButton: {
-    width: '45%',
-    flexDirection: 'row',
-    justifyContent: 'center',
     alignItems: 'center',
-    gap: 8,
+    marginTop: heightSize(16),
   },
   verticalDivider: {
     width: 1,

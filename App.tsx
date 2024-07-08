@@ -9,6 +9,7 @@ import LoginScreen from './src/screens/LoginScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import Icon from './src/components/atom/Icon/Icon';
 import colors from './src/components/constants/colors';
+import ProfileScreen from './src/screens/ProfileScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -20,7 +21,8 @@ function HomeTabs() {
         name="Home"
         component={HomeScreen}
         options={{
-          tabBarIcon: () => <Icon name="house" fill={colors.purple600} />,
+          tabBarActiveTintColor: colors.purple600,
+          tabBarIcon: ({ color }) => <Icon name="house" fill={color} />,
           headerTitle: () => (
             <Image source={require('./assets/images/Investly_Logo.png')} />
           ),
@@ -29,6 +31,15 @@ function HomeTabs() {
               <Icon name="bell" fill={colors.purple600} />
             </View>
           ),
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          tabBarActiveTintColor: colors.purple600,
+          tabBarIcon: ({ color }) => <Icon name="user" fill={color} />,
+          headerShown: false,
         }}
       />
     </Tab.Navigator>

@@ -9,17 +9,6 @@ const QuestionCircle = ({fill = '#d5d5d5', ...props}: SvgProps) => (
     fill="none"
     {...props}
   >
-    <Path fill="#E5E5E5" d="M0 0h24v24H0z" />
-    <Path fill="#fff" d="M-328-328h1440V750H-328z" />
-    <Rect
-      width={231}
-      height={63}
-      x={-187.5}
-      y={-19.5}
-      stroke="#7B61FF"
-      strokeDasharray="10 5"
-      rx={7.5}
-    />
     <G clipPath="url(#a)">
       <Path
         fill={fill}
