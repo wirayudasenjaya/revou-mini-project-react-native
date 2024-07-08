@@ -64,9 +64,9 @@ export default function TextField({
 
   return (
     <View>
-      <Typography type="heading" size="small" style={styles.label}>
+      {label && <Typography type="heading" size="small" style={styles.label}>
         {label}
-      </Typography>
+      </Typography>}
       <View style={[styles.inputTextContainer, getStyleByState()]}>
         <TextInput
           secureTextEntry={type === 'password' && isVisible === false}

@@ -24,8 +24,22 @@ export default function LoginScreen({navigation}) {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [emailState, setEmailState] = useState('default');
-  const [passwordState, setPasswordState] = useState('default');
+  const [emailState, setEmailState] = useState<
+    | 'disabled'
+    | 'default'
+    | 'positive'
+    | 'negative'
+    | 'focused'
+    | 'default-no-label'
+  >('default');
+  const [passwordState, setPasswordState] = useState<
+    | 'disabled'
+    | 'default'
+    | 'positive'
+    | 'negative'
+    | 'focused'
+    | 'default-no-label'
+  >('default');
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
 
@@ -51,7 +65,7 @@ export default function LoginScreen({navigation}) {
 
   const handleLogin = () => {
     if (isEmailValid && isPasswordValid) {
-      console.log('VALIDATED');
+      navigation.navigate('HomeTabs');
     }
   };
 
@@ -65,18 +79,22 @@ export default function LoginScreen({navigation}) {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                
               }}>
               <ChevronLeft />
               <InvestlyLogo width={24} height={24} />
-                <Button variant="link" type="text" size="small">
-                  <Typography
-                    type="heading"
-                    size="xsmall"
-                    style={{textAlign: 'center', color: colors.purple600}}>
-                    Lewati
-                  </Typography>
-                </Button>      
+              <Button
+                variant="link"
+                type="text"
+                size="small"
+                disabled={false}
+                onPress={() => {}}>
+                <Typography
+                  type="heading"
+                  size="xsmall"
+                  style={{textAlign: 'center', color: colors.purple600}}>
+                  Lewati
+                </Typography>
+              </Button>
             </View>
             <Typography type="heading" size="large" style={styles.title}>
               Masuk ke Investly
@@ -148,7 +166,7 @@ const styles = StyleSheet.create({
   upperItem: {
     flex: 7,
     width: '100%',
-    justifyContent: 'start',
+    justifyContent: 'flex-start',
   },
   title: {
     textAlign: 'center',

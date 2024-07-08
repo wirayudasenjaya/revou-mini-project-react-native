@@ -1,5 +1,12 @@
 import {useRef, useState} from 'react';
-import {SafeAreaView, Image, Dimensions, View, FlatList, StyleSheet} from 'react-native';
+import {
+  SafeAreaView,
+  Image,
+  Dimensions,
+  View,
+  FlatList,
+  StyleSheet,
+} from 'react-native';
 
 import Typography from '../components/Typography';
 import colors from '../components/constants/colors';
@@ -11,7 +18,7 @@ const screenHeight = Dimensions.get('screen').height;
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-export default function OnboardingScreen({ navigation }) {
+export default function OnboardingScreen({navigation}) {
   const flatListRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -32,7 +39,7 @@ export default function OnboardingScreen({ navigation }) {
       image: require('../../assets/images/Invest.png'),
       title: 'Invest',
       description:
-        'Atur portfolio kamu dan langsungmberinvestasi dengan mudah dengan\nberagam pilihan aset ',
+        'Atur portfolio kamu dan langsung berinvestasi\ndengan mudah dengan beragam pilihan aset',
     },
   ];
 
@@ -53,8 +60,7 @@ export default function OnboardingScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView
-      style={styles.mainBackground}>
+    <SafeAreaView style={styles.mainBackground}>
       <FlatList
         ref={flatListRef}
         data={data}
@@ -63,13 +69,10 @@ export default function OnboardingScreen({ navigation }) {
         decelerationRate={'fast'}
         snapToInterval={windowWidth}
         onMomentumScrollEnd={handleOnMomentumEnd}
+        showsHorizontalScrollIndicator={false}
         renderItem={({item}) => (
-          <View
-            style={styles.contentContainer}>
-            <Image
-              style={styles.image}
-              source={item.image}
-            />
+          <View style={styles.contentContainer}>
+            <Image style={styles.image} source={item.image} />
             <View style={styles.contentGap} />
             <Typography
               type="heading"
@@ -99,8 +102,7 @@ export default function OnboardingScreen({ navigation }) {
                       index === currentIndex
                         ? colors.purple600
                         : colors.purple100,
-                    width:
-                      index === currentIndex ? 16 : 8,
+                    width: index === currentIndex ? 16 : 8,
                     height: 8,
                     borderRadius: 50,
                   }}
@@ -108,25 +110,25 @@ export default function OnboardingScreen({ navigation }) {
               ))}
             </View>
             <View style={{marginVertical: heightSize(42)}} />
-            <View style={{width: '100%'}}>
-              <Button
-                variant="primary"
-                type="text"
-                size="large"
-                disabled={false}
-                onPress={handleNext}>
-                <Typography
-                  type="heading"
-                  size="medium"
-                  style={{color: colors.neutral100, textAlign: 'center'}}>
-                  {currentIndex === data.length - 1 ? 'Get Started' : 'Next'}
-                </Typography>
-              </Button>
-            </View>
           </View>
         )}
         keyExtractor={item => item.title}
       />
+      <View style={{width: '100%', flex: 1, paddingHorizontal: widthSize(20)}}>
+        <Button
+          variant="primary"
+          type="text"
+          size="large"
+          disabled={false}
+          onPress={handleNext}>
+          <Typography
+            type="heading"
+            size="medium"
+            style={{color: colors.neutral100, textAlign: 'center'}}>
+            {currentIndex === data.length - 1 ? 'Get Started' : 'Next'}
+          </Typography>
+        </Button>
+      </View>
     </SafeAreaView>
   );
 }
@@ -140,14 +142,18 @@ const styles = StyleSheet.create({
     width: screenWidth,
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: widthSize(20),
+    justifyContent: 'flex-end',
   },
   image: {
     width: widthSize(240),
     height: widthSize(240),
   },
   contentGap: {
-    marginVertical: heightSize(8)
-  }
-})
+    marginVertical: heightSize(8),
+  },
+  buttonContainer: {
+    width: '100%',
+    flex: 1,
+    paddingHorizontal: widthSize(20),
+  },
+});

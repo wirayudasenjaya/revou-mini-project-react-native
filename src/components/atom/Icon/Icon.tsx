@@ -1,4 +1,18 @@
-type IconName = 'arrow-circle-left' | 'check' | 'eye';
+type IconName =
+  | 'arrow-circle-left'
+  | 'check'
+  | 'eye'
+  | 'bell'
+  | 'chevron-left'
+  | 'question-circle'
+  | 'plus'
+  | 'user'
+  | 'ellipsis'
+  | 'arrow-up'
+  | 'arrow-down'
+  | 'comment'
+  | 'retweet'
+  | 'house';
 
 type IconProps = {
   name: IconName;
@@ -14,6 +28,17 @@ const IconMap: Record<
   'arrow-circle-left': require('./ArrowCircleLeft').default,
   check: require('./Check').default,
   eye: require('./Eye').default,
+  bell: require('./Bell').default,
+  'chevron-left': require('./ChevronLeft').default,
+  'question-circle': require('./QuestionCircle').default,
+  plus: require('./Plus').default,
+  user: require('./User').default,
+  ellipsis: require('./Ellipsis').default,
+  'arrow-up': require('./ArrowUp').default,
+  'arrow-down': require('./ArrowDown').default,
+  comment: require('./Comment').default,
+  retweet: require('./Retweet').default,
+  house: require('./House').default,
 };
 
 export default function Icon({name, ...props}: IconProps) {
