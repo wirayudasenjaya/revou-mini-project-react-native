@@ -10,6 +10,7 @@ import HomeScreen from './src/screens/HomeScreen';
 import Icon from './src/components/atom/Icon/Icon';
 import colors from './src/components/constants/colors';
 import ProfileScreen from './src/screens/ProfileScreen';
+import {UserProvider} from './src/utils/context';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -22,7 +23,7 @@ function HomeTabs() {
         component={HomeScreen}
         options={{
           tabBarActiveTintColor: colors.purple600,
-          tabBarIcon: ({ color }) => <Icon name="house" fill={color} />,
+          tabBarIcon: ({color}) => <Icon name="house" fill={color} />,
           headerTitle: () => (
             <Image source={require('./assets/images/Investly_Logo.png')} />
           ),
@@ -38,7 +39,7 @@ function HomeTabs() {
         component={ProfileScreen}
         options={{
           tabBarActiveTintColor: colors.purple600,
-          tabBarIcon: ({ color }) => <Icon name="user" fill={color} />,
+          tabBarIcon: ({color}) => <Icon name="user" fill={color} />,
           headerShown: false,
         }}
       />
@@ -48,31 +49,33 @@ function HomeTabs() {
 
 function App(): React.JSX.Element {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Onboarding"
-          component={OnboardingScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="HomeTabs"
-          component={HomeTabs}
-          options={{
-            headerShown: false,
-          }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <UserProvider>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Onboarding"
+            component={OnboardingScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="HomeTabs"
+            component={HomeTabs}
+            options={{
+              headerShown: false,
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </UserProvider>
   );
 }
 

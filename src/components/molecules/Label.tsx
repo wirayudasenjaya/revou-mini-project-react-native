@@ -1,5 +1,4 @@
 import {StyleSheet, View} from 'react-native';
-import { heightSize, widthSize } from '../../utils/utils';
 
 type LabelProps = {
   variant: 'primary' | 'secondary' | 'tertiary';
@@ -14,10 +13,13 @@ export default function Label({variant, children, fill}: LabelProps) {
     switch (variant) {
       case 'primary':
         labelStyle = {...styles.primary, backgroundColor: fill};
+        break;
       case 'secondary':
-        labelStyle = {...styles.secondary, backgroundColor: fill};
+        labelStyle = {...styles.secondary, borderColor: fill};
+        break;
       case 'tertiary':
         labelStyle = {...styles.tertiary, backgroundColor: fill};
+        break;
     }
 
     return labelStyle;
@@ -29,11 +31,14 @@ export default function Label({variant, children, fill}: LabelProps) {
 const styles = StyleSheet.create({
 	label: {
 		alignSelf: 'flex-start',
-		paddingHorizontal: widthSize(12),
-		paddingVertical: heightSize(4),
+		paddingHorizontal: 12,
+		paddingVertical: 4,
 		borderRadius: 16,
 	},
   primary: {},
-  secondary: {},
+  secondary: {
+    backgroundColor: 'white',
+    borderWidth: 1,
+  },
   tertiary: {},
 });

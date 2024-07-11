@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useContext, useState} from 'react';
 import {
   Dimensions,
   SafeAreaView,
@@ -6,40 +6,32 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 import Typography from '../components/Typography';
-import {widthSize, heightSize} from '../utils/utils';
 import Button from '../components/molecules/Button';
 import colors from '../components/constants/colors';
 import TextField from '../components/molecules/TextInput';
 import InvestlyLogo from '../components/atom/Icon/Investly';
 import ChevronLeft from '../components/atom/Icon/ChevronLeft';
+import {InputStateProps, StackParams} from '../utils/types';
+import { UserContext } from '../utils/context';
 
 const screenHeight = Dimensions.get('screen').height;
 
-export default function LoginScreen({navigation}) {
+type ScreenProps = NativeStackScreenProps<StackParams, 'Login'>;
+
+export default function LoginScreen({navigation}: ScreenProps) {
+  const context = useContext(UserContext);
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,64}$/;
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [emailState, setEmailState] = useState<
-    | 'disabled'
-    | 'default'
-    | 'positive'
-    | 'negative'
-    | 'focused'
-    | 'default-no-label'
-  >('default');
-  const [passwordState, setPasswordState] = useState<
-    | 'disabled'
-    | 'default'
-    | 'positive'
-    | 'negative'
-    | 'focused'
-    | 'default-no-label'
-  >('default');
+  const [emailState, setEmailState] = useState<InputStateProps>('default');
+  const [passwordState, setPasswordState] =
+    useState<InputStateProps>('default');
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
 
@@ -64,8 +56,9 @@ export default function LoginScreen({navigation}) {
   };
 
   const handleLogin = () => {
-    if (isEmailValid && isPasswordValid) {
-      navigation.navigate('HomeTabs');
+    if (email.includes('@test.app') && password === 'TestApp123!') {
+      context?.setState(email);
+      navigation.replace('HomeTabs');
     }
   };
 
@@ -73,21 +66,27 @@ export default function LoginScreen({navigation}) {
     <SafeAreaView style={styles.mainBackground}>
       <View style={styles.contentContainer}>
         <View style={styles.upperItem}>
-          <View style={{paddingTop: heightSize(12)}}>
+          <View style={{paddingTop: 12}}>
             <View
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
-              <ChevronLeft />
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Onboarding')}>
+                <ChevronLeft />
+              </TouchableOpacity>
               <InvestlyLogo width={24} height={24} />
               <Button
                 variant="link"
                 type="text"
                 size="small"
                 disabled={false}
-                onPress={() => {}}>
+                onPress={() =>{
+                  context?.setState('guest');
+                  navigation.replace('HomeTabs')
+                }}>
                 <Typography
                   type="heading"
                   size="xsmall"
@@ -111,7 +110,7 @@ export default function LoginScreen({navigation}) {
             onChangeText={text => setEmail(text)}
             onBlur={handleEmailBlur}
           />
-          <View style={{marginVertical: heightSize(12)}} />
+          <View style={{marginVertical: 12}} />
           <TextField
             state={passwordState}
             type="password"
@@ -122,7 +121,7 @@ export default function LoginScreen({navigation}) {
             onChangeText={text => setPassword(text)}
             onBlur={handlePasswordBlur}
           />
-          <View style={{marginVertical: heightSize(8)}} />
+          <View style={{marginVertical: 8}} />
           <TouchableOpacity>
             <Typography type="heading" size="xsmall" style={{color: '#4343EF'}}>
               Lupa Password
@@ -160,8 +159,8 @@ const styles = StyleSheet.create({
   contentContainer: {
     height: screenHeight,
     justifyContent: 'space-between',
-    paddingHorizontal: widthSize(20),
-    paddingVertical: heightSize(40),
+    paddingHorizontal: 20,
+    paddingVertical: 40,
   },
   upperItem: {
     flex: 7,
@@ -171,6 +170,6 @@ const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
     color: colors.neutral700,
-    marginTop: heightSize(24),
+    marginTop: 24,
   },
 });

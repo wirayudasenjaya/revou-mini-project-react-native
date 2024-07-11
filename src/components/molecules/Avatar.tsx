@@ -1,4 +1,4 @@
-import {StyleSheet, View} from 'react-native';
+import {Image, StyleSheet, View} from 'react-native';
 import colors from '../constants/colors';
 import Icon from '../atom/Icon/Icon';
 
@@ -26,17 +26,29 @@ export default function Avatar({size, state, photo}: AvatarProps) {
     }
   };
 
-  return <View style={[styles.avatar, getAvatarStyle()]}>
-		<Icon name='user' />
-	</View>;
+  const avatarChild = () => {
+    switch (state) {
+      case 'empty':
+        return <Icon name="user" />;
+      case 'photo':
+        return (
+          <Image
+            source={{uri: photo}}
+            style={[styles.avatar, getAvatarStyle()]}
+          />
+        );
+    }
+  };
+
+  return <View style={[styles.avatar, getAvatarStyle()]}>{avatarChild()}</View>;
 }
 
 const styles = StyleSheet.create({
   avatar: {
     borderRadius: 80,
-		backgroundColor: colors.purple600,
-		justifyContent: 'center',
-		alignItems: 'center',
+    backgroundColor: colors.purple600,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   xxlarge: {
     width: 64,

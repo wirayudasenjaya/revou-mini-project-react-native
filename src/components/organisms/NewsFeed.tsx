@@ -1,103 +1,260 @@
-import {StyleSheet, View} from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  RefreshControl,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 import Avatar from '../molecules/Avatar';
 import Typography from '../Typography';
 import Icon from '../atom/Icon/Icon';
-import {heightSize, widthSize} from '../../utils/utils';
 import colors from '../constants/colors';
 import Label from '../molecules/Label';
-import ActionButton from '../molecules/ActionButton';
+import {NewsFeedProps} from '../../utils/types';
+import Button from '../molecules/Button';
 
-export default function NewsFeed({}) {
-  const data = [{}, {}, {}];
+export default function NewsFeed({
+  data,
+  loading,
+  login,
+  navigation,
+  refreshing,
+  onRefresh,
+}: NewsFeedProps) {
+  const handleLoginRedirect = () => {
+    if (login === 'guest') {
+      navigation.replace('Login');
+    }
+  };
+
   return (
     <View>
-      {data.map(() => (
-        <View style={styles.newsCard}>
-          <View style={styles.newsCardTop}>
-            <View style={{flexDirection: 'row', gap: 12}}>
-              <Avatar size="large" state="photo" />
-              <View>
-                <Typography type="heading" size="xsmall" style={styles.title}>
-                  Tilatuma
-                </Typography>
-                <Typography
-                  type="paragraph"
-                  size="small"
-                  style={styles.subtitle}>
-                  Financial Enthusiast
-                </Typography>
-                <Typography
-                  type="paragraph"
-                  size="xsmall"
-                  style={styles.subtitle}>
-                  1 menit yang lalu
-                </Typography>
+      {loading ? (
+        <ActivityIndicator size="large" style={{marginTop: 10}} />
+      ) : (
+        <TouchableOpacity onPress={handleLoginRedirect}>
+          <FlatList
+            data={data}
+            showsVerticalScrollIndicator={false}
+            initialNumToRender={5}
+            nestedScrollEnabled={true}
+            refreshControl={
+              <RefreshControl
+                colors={['#9Bd35A', '#689F38']}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
+            }
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            keyExtractor={item => item.post_header}
+            ListFooterComponent={
+              <>
+                <View style={styles.seen}>
+                  <Typography
+                    type="paragraph"
+                    size="small"
+                    style={styles.seenText}>
+                    Semua feed sudah kamu lihat 🎉
+                  </Typography>
+                </View>
+                {login === 'guest' && (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      gap: 8,
+                      paddingVertical: 12,
+                      paddingHorizontal: 16,
+                      backgroundColor: colors.purple100,
+                    }}>
+                    <Image
+                      source={require('../../../assets/images/Investly_Mascot_1.png')}
+                      style={{width: 40, height: 28}}
+                    />
+                    <View style={{flexDirection: 'row'}}>
+                      <Typography
+                        type="paragraph"
+                        size="small"
+                        style={styles.subtitle}>
+                        Temukan inspirasi investasi,
+                      </Typography>
+                      <TouchableOpacity onPress={handleLoginRedirect}>
+                        <Typography
+                          type="heading"
+                          size="xsmall"
+                          style={{color: colors.purple600}}>
+                          {' '}
+                          Masuk yuk!
+                        </Typography>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                )}
+              </>
+            }
+            renderItem={({item, index}) => (
+              <View key={index} style={styles.newsCard}>
+                <View style={styles.newsCardTop}>
+                  <View style={{flexDirection: 'row', gap: 12}}>
+                    <Avatar
+                      size="large"
+                      state="photo"
+                      photo={item.avatar_url}
+                    />
+                    <View>
+                      <Typography
+                        type="heading"
+                        size="xsmall"
+                        style={styles.title}>
+                        {item.name}
+                      </Typography>
+                      <Typography
+                        type="paragraph"
+                        size="small"
+                        style={styles.subtitle}>
+                        {item.headline}
+                      </Typography>
+                      <Typography
+                        type="paragraph"
+                        size="xsmall"
+                        style={styles.subtitle}>
+                        {item.created_at.toString()}
+                      </Typography>
+                    </View>
+                  </View>
+                  <TouchableOpacity onPress={handleLoginRedirect}>
+                    <Icon name="ellipsis" />
+                  </TouchableOpacity>
+                </View>
+                <View style={{marginTop: 12}}>
+                  <Typography type="heading" size="medium" style={styles.title}>
+                    {item.post_header}
+                  </Typography>
+                  <Typography
+                    type="paragraph"
+                    size="medium"
+                    style={styles.title}>
+                    {item.post_content}
+                  </Typography>
+                </View>
+                <View style={{marginVertical: 12}}>
+                  <Label variant="tertiary" fill={colors.green100}>
+                    <Typography
+                      type="heading"
+                      size="xsmall"
+                      style={{color: colors.green600}}>
+                      {item.post_topic}
+                    </Typography>
+                  </Label>
+                </View>
+                <View style={{flexDirection: 'row', gap: 8}}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      backgroundColor: colors.neutral200,
+                      borderRadius: 96,
+                    }}>
+                    <Button
+                      variant="link"
+                      size="small"
+                      type="icon-left"
+                      disabled={false}
+                      onPress={handleLoginRedirect}>
+                      <Icon
+                        name="arrow-up"
+                        width={16}
+                        height={16}
+                        fill={colors.neutral700}
+                      />
+                      <Typography
+                        type="paragraph"
+                        size="small"
+                        style={styles.title}>
+                        {item.post_upvote}
+                      </Typography>
+                    </Button>
+                    <View
+                      style={{
+                        width: 1,
+                        height: '60%',
+                        backgroundColor: colors.neutral400,
+                      }}
+                    />
+                    <Button
+                      variant="link"
+                      size="small"
+                      type="icon-left"
+                      disabled={false}
+                      onPress={handleLoginRedirect}>
+                      <Icon
+                        name="arrow-down"
+                        width={16}
+                        height={16}
+                        fill={colors.neutral700}
+                      />
+                    </Button>
+                  </View>
+                  <View
+                    style={{
+                      backgroundColor: colors.neutral200,
+                      borderRadius: 96,
+                    }}>
+                    <Button
+                      variant="link"
+                      size="small"
+                      type="icon-left"
+                      disabled={false}
+                      onPress={handleLoginRedirect}>
+                      <Icon
+                        name="comment"
+                        width={16}
+                        height={16}
+                        fill={colors.neutral700}
+                      />
+                      <Typography
+                        type="paragraph"
+                        size="small"
+                        style={styles.title}>
+                        {item.post_comment}
+                      </Typography>
+                    </Button>
+                  </View>
+                  <View
+                    style={{
+                      backgroundColor: colors.neutral200,
+                      borderRadius: 96,
+                    }}>
+                    <Button
+                      variant="link"
+                      size="small"
+                      type="icon-left"
+                      disabled={false}
+                      onPress={handleLoginRedirect}>
+                      <Icon
+                        name="retweet"
+                        width={16}
+                        height={16}
+                        fill={colors.neutral700}
+                      />
+                      <Typography
+                        type="paragraph"
+                        size="small"
+                        style={styles.title}>
+                        {item.post_downvote}
+                      </Typography>
+                    </Button>
+                  </View>
+                </View>
               </View>
-            </View>
-            <Icon name="ellipsis" />
-          </View>
-          <View style={{marginTop: heightSize(12)}}>
-            <Typography type="heading" size="medium" style={styles.title}>
-              Buat yang pegang GoTo
-            </Typography>
-            <Typography type="paragraph" size="medium" style={styles.title}>
-              #MasiGoto
-            </Typography>
-          </View>
-          <View style={{marginVertical: heightSize(12)}}>
-            <Label variant="primary" fill={colors.green100}>
-              <Typography
-                type="heading"
-                size="xsmall"
-                style={{color: colors.green600}}>
-                Investasi
-              </Typography>
-            </Label>
-          </View>
-          <View style={{flexDirection: 'row', gap: widthSize(8)}}>
-            <ActionButton onPress={() => {}}>
-              <View style={styles.buttonContainer}>
-                <Icon name="arrow-up" fill={colors.neutral700} />
-                <Typography type="paragraph" size="small" style={styles.title}>
-                  0
-                </Typography>
-                <View
-                  style={{
-                    width: 1,
-                    height: 16,
-                    backgroundColor: colors.neutral400,
-                    marginHorizontal: 12,
-                  }}
-                />
-                <Icon name="arrow-down" fill={colors.neutral700} />
-              </View>
-            </ActionButton>
-            <ActionButton onPress={() => {}}>
-              <View style={styles.buttonContainer}>
-                <Icon name="comment" fill={colors.neutral700} />
-                <Typography type="paragraph" size="small" style={styles.title}>
-                  0
-                </Typography>
-              </View>
-            </ActionButton>
-            <ActionButton onPress={() => {}}>
-              <View style={styles.buttonContainer}>
-                <Icon name="retweet" fill={colors.neutral700} />
-                <Typography type="paragraph" size="small" style={styles.title}>
-                  0
-                </Typography>
-              </View>
-            </ActionButton>
-          </View>
-        </View>
-      ))}
-      <View style={styles.seen}>
-        <Typography type="paragraph" size="small" style={styles.seenText}>
-          Semua feed sudah kamu lihat 🎉
-        </Typography>
-      </View>
-      <View></View>
+            )}
+          />
+        </TouchableOpacity>
+      )}
     </View>
   );
 }

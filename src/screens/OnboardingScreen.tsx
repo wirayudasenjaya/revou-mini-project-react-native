@@ -6,21 +6,24 @@ import {
   View,
   FlatList,
   StyleSheet,
+  useWindowDimensions,
 } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import Typography from '../components/Typography';
 import colors from '../components/constants/colors';
 import Button from '../components/molecules/Button';
-import {widthSize, heightSize} from '../utils/utils';
+import { StackParams } from '../utils/types';
 
 const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
 
-export default function OnboardingScreen({navigation}) {
+type ScreenProps = NativeStackScreenProps<StackParams, 'Onboarding'>;
+
+export default function OnboardingScreen({navigation}: ScreenProps) {
   const flatListRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const {height, width} = useWindowDimensions();
 
   const data = [
     {
@@ -67,7 +70,7 @@ export default function OnboardingScreen({navigation}) {
         horizontal={true}
         snapToAlignment="start"
         decelerationRate={'fast'}
-        snapToInterval={windowWidth}
+        snapToInterval={width}
         onMomentumScrollEnd={handleOnMomentumEnd}
         showsHorizontalScrollIndicator={false}
         renderItem={({item}) => (
@@ -87,7 +90,7 @@ export default function OnboardingScreen({navigation}) {
               style={{textAlign: 'center', color: colors.neutral700}}>
               {item.description}
             </Typography>
-            <View style={{marginVertical: heightSize(13)}} />
+            <View style={{marginVertical: 13}} />
             <View
               style={{
                 flexDirection: 'row',
@@ -109,12 +112,12 @@ export default function OnboardingScreen({navigation}) {
                 />
               ))}
             </View>
-            <View style={{marginVertical: heightSize(42)}} />
+            <View style={{marginVertical: 42}} />
           </View>
         )}
         keyExtractor={item => item.title}
       />
-      <View style={{width: '100%', flex: 1, paddingHorizontal: widthSize(20)}}>
+      <View style={styles.buttonContainer}>
         <Button
           variant="primary"
           type="text"
@@ -145,15 +148,15 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   image: {
-    width: widthSize(240),
-    height: widthSize(240),
+    width: 240,
+    height: 240,
   },
   contentGap: {
-    marginVertical: heightSize(8),
+    marginVertical: 8,
   },
   buttonContainer: {
     width: '100%',
     flex: 1,
-    paddingHorizontal: widthSize(20),
+    paddingHorizontal: 20,
   },
 });
