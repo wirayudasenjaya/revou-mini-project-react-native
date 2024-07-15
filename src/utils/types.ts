@@ -1,7 +1,5 @@
-import type {NativeStackScreenProps} from '@react-navigation/native-stack';
-
-export type NewsFeedProps = {
-  data: NewsProps[];
+export type FeedProps = {
+  data: PostProps[];
   loading: boolean;
   login: string | undefined;
   navigation: any;
@@ -9,7 +7,7 @@ export type NewsFeedProps = {
   onRefresh: any;
 };
 
-export type NewsProps = {
+export type PostProps = {
   avatar_url: string;
   name: string;
   headline: string;
@@ -18,7 +16,7 @@ export type NewsProps = {
   post_content: string;
   post_topic: string;
   post_upvote: number;
-  post_downvote: number;
+  post_retweet: number;
   post_comment: number;
 };
 
@@ -36,4 +34,12 @@ export type StackParams = {
   Login: undefined;
   Profile: undefined;
   HomeTabs: undefined;
+  Create: undefined;
+  Detail: {post: PostProps};
 };
+
+export type AuthState = {
+  isLoggedIn: boolean;
+};
+
+export type AuthAction = {type: 'LOGIN'} | {type: 'LOGOUT'};

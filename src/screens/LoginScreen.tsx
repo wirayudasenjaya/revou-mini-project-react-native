@@ -1,5 +1,6 @@
 import {useContext, useState} from 'react';
 import {
+  Alert,
   Dimensions,
   SafeAreaView,
   StyleSheet,
@@ -15,14 +16,17 @@ import TextField from '../components/molecules/TextInput';
 import InvestlyLogo from '../components/atom/Icon/Investly';
 import ChevronLeft from '../components/atom/Icon/ChevronLeft';
 import {InputStateProps, StackParams} from '../utils/types';
-import { UserContext } from '../utils/context';
+import {UserContext} from '../utils/userContext';
+import Label from '../components/molecules/Label';
+import {AuthContext} from '../utils/authContext';
 
 const screenHeight = Dimensions.get('screen').height;
 
 type ScreenProps = NativeStackScreenProps<StackParams, 'Login'>;
 
 export default function LoginScreen({navigation}: ScreenProps) {
-  const context = useContext(UserContext);
+  const {setUser} = useContext(UserContext);
+  const {login} = useContext(AuthContext);
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,64}$/;
@@ -57,8 +61,10 @@ export default function LoginScreen({navigation}: ScreenProps) {
 
   const handleLogin = () => {
     if (email.includes('@test.app') && password === 'TestApp123!') {
-      context?.setState(email);
-      navigation.replace('HomeTabs');
+      setUser(email);
+      login();
+    } else {
+      Alert.alert('Login Error', 'Invalid credentials')
     }
   };
 
@@ -70,30 +76,34 @@ export default function LoginScreen({navigation}: ScreenProps) {
             <View
               style={{
                 flexDirection: 'row',
-                justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
               <TouchableOpacity
+                style={{flex: 1, alignItems: 'flex-start'}}
                 onPress={() => navigation.navigate('Onboarding')}>
                 <ChevronLeft />
               </TouchableOpacity>
-              <InvestlyLogo width={24} height={24} />
-              <Button
-                variant="link"
-                type="text"
-                size="small"
-                disabled={false}
-                onPress={() =>{
-                  context?.setState('guest');
-                  navigation.replace('HomeTabs')
-                }}>
-                <Typography
-                  type="heading"
-                  size="xsmall"
-                  style={{textAlign: 'center', color: colors.purple600}}>
-                  Lewati
-                </Typography>
-              </Button>
+              <View style={{flex: 1, alignItems: 'center'}}>
+                <InvestlyLogo width={24} height={24} />
+              </View>
+              <View style={{flex: 1, alignItems: 'flex-end'}}>
+                <Button
+                  variant="link"
+                  type="text"
+                  size="small"
+                  disabled={false}
+                  onPress={() => {
+                    setUser('guest');
+                    login();
+                  }}>
+                  <Typography
+                    type="heading"
+                    size="xsmall"
+                    style={{textAlign: 'center', color: colors.purple600}}>
+                    Lewati
+                  </Typography>
+                </Button>
+              </View>
             </View>
             <Typography type="heading" size="large" style={styles.title}>
               Masuk ke Investly

@@ -21,11 +21,12 @@ import colors from '../components/constants/colors';
 import TextField from '../components/molecules/TextInput';
 import Avatar from '../components/molecules/Avatar';
 import Icon from '../components/atom/Icon/Icon';
-import NewsFeed from '../components/organisms/NewsFeed';
+import Feed from '../components/organisms/Feed';
 import Button from '../components/molecules/Button';
-import {generateFakeNewsFeedData} from '../utils/fakeData';
-import {NewsFeedProps, NewsProps, StackParams} from '../utils/types';
-import {UserContext} from '../utils/context';
+import {generateFakeFeedData} from '../utils/fakeData';
+import {FeedProps, PostProps, StackParams} from '../utils/types';
+import {UserContext} from '../utils/userContext';
+import { PostContext } from '../utils/postContext';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -39,8 +40,8 @@ const TrendingPage = memo(
     navigation,
     onRefresh,
     refreshing,
-  }: NewsFeedProps) => (
-    <NewsFeed
+  }: FeedProps) => (
+    <Feed
       loading={loading}
       data={data}
       login={login}
@@ -59,8 +60,8 @@ const NewestPage = memo(
     navigation,
     onRefresh,
     refreshing,
-  }: NewsFeedProps) => (
-    <NewsFeed
+  }: FeedProps) => (
+    <Feed
       loading={loading}
       data={data}
       login={login}
@@ -72,7 +73,8 @@ const NewestPage = memo(
 );
 
 export default function HomeScreen({navigation}: ScreenProps) {
-  const context = useContext(UserContext);
+  const { user } = useContext(UserContext);
+  const { posts } = useContext(PostContext);
   const [index, setIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -80,19 +82,20 @@ export default function HomeScreen({navigation}: ScreenProps) {
     {key: 'trending', title: 'Trending'},
     {key: 'terbaru', title: 'Terbaru'},
   ]);
-  const [trendingData, setTrendingData] = useState<NewsProps[]>([]);
-  const [newestData, setNewestData] = useState<NewsProps[]>([]);
-  const data = useMemo(() => generateFakeNewsFeedData(100), []);
+  const [trendingData, setTrendingData] = useState<PostProps[]>([]);
+  const [newestData, setNewestData] = useState<PostProps[]>([]);
+  const data = useMemo(() => generateFakeFeedData(100), []);
 
   useEffect(() => {
-    const trending = [...data].sort((a, b) => b.post_upvote - a.post_upvote);
-    const newest = [...data].sort((a, b) =>
+    const feeds = [...data, ...posts];
+    const trending = [...feeds].sort((a, b) => b.post_upvote - a.post_upvote);
+    const newest = [...feeds].sort((a, b) =>
       b.created_at > a.created_at ? 1 : -1,
     );
     setTrendingData(trending);
     setNewestData(newest);
     setLoading(false);
-  }, [data]);
+  }, [data, posts]);
 
   const renderScene = useCallback(
     ({route}) => {
@@ -102,7 +105,7 @@ export default function HomeScreen({navigation}: ScreenProps) {
             <TrendingPage
               loading={loading}
               data={trendingData}
-              login={context?.state}
+              login={user}
               navigation={navigation}
               refreshing={refreshing}
               onRefresh={onRefresh}
@@ -113,7 +116,7 @@ export default function HomeScreen({navigation}: ScreenProps) {
             <NewestPage
               loading={loading}
               data={newestData}
-              login={context?.state}
+              login={user}
               navigation={navigation}
               refreshing={refreshing}
               onRefresh={onRefresh}
@@ -154,21 +157,30 @@ export default function HomeScreen({navigation}: ScreenProps) {
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    const newData = generateFakeNewsFeedData(100);
-    const trending = [...newData].sort((a, b) => b.post_upvote - a.post_upvote);
-    const newest = [...newData].sort((a, b) =>
+    const newData = generateFakeFeedData(100);
+    const feeds = [...newData, ...posts];
+    const trending = [...feeds].sort((a, b) => b.post_upvote - a.post_upvote);
+    const newest = [...feeds].sort((a, b) =>
       b.created_at > a.created_at ? 1 : -1,
     );
     setTrendingData(trending);
     setNewestData(newest);
     setRefreshing(false);
-  }, []);
+  }, [data, posts]);
 
   const handleLoginRedirect = () => {
-    if (context?.state === 'guest') {
+    if (user === 'guest') {
       navigation.replace('Login');
     }
   };
+
+  const createPost = () => {
+    if (user === 'guest') {
+      navigation.replace('Login');
+    } else {
+      navigation.navigate('Create');
+    }
+  }
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -176,7 +188,7 @@ export default function HomeScreen({navigation}: ScreenProps) {
         <View style={styles.cardTopContent}>
           <Avatar
             size="large"
-            state={context?.state === 'guest' ? 'empty' : 'photo'}
+            state={user === 'guest' ? 'empty' : 'photo'}
             photo="https://s3-alpha-sig.figma.com/img/b472/1564/b04bd24355d7fcd28e8592df82f22e17?Expires=1721606400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=L0E0VfTzpEVgsylQwpC3zYM~lyQlyt9U0u8WHZAuyXwl70zaw3txFb6zYrY9kfGa~L1dhc947f2AeCZ6Kew81~xQMEK4tnTgwcOUXRqcYYYLbNGsNJPJ-mOSIeFfbLtOJrhgof2nzQRauClb-95GwN8qbe5TTjrlVGrKJUSpRmKvsEXMPoQ5rlA74PSW~ScAXNUTYyM2zpOBuvpBlPFexGDtFC~7a3pm0iyGhhQ0lTFC7rBTcPNMS8tlaooQsEbA3gSPHFDLd3Ia6P5a7Ur244HVSywdf~zdq1JKNrVgiY3CnWmPbq-RDK9S6R1IT8rCFwyr8dzGRBYV-yaw8Q9Z3A__"
           />
           <View style={styles.cardInputContainer}>
@@ -191,13 +203,13 @@ export default function HomeScreen({navigation}: ScreenProps) {
           </View>
         </View>
         <View style={styles.cardBottomContent}>
-          <View style={{width: '40%'}}>
+          <View style={{width: '45%'}}>
             <Button
               type="icon-left"
               variant="link"
               size="small"
               disabled={false}
-              onPress={handleLoginRedirect}>
+              onPress={createPost}>
               <Icon name="question-circle" fill={colors.yellow600} />
               <Typography
                 type="heading"
@@ -208,13 +220,13 @@ export default function HomeScreen({navigation}: ScreenProps) {
             </Button>
           </View>
           <View style={styles.verticalDivider} />
-          <View style={{width: '40%'}}>
+          <View style={{width: '45%'}}>
             <Button
               type="icon-left"
               variant="link"
               size="small"
               disabled={false}
-              onPress={handleLoginRedirect}>
+              onPress={createPost}>
               <Icon name="plus" fill={colors.green600} />
               <Typography
                 type="heading"

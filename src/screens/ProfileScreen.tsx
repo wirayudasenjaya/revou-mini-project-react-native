@@ -1,28 +1,44 @@
-import {Image, View} from 'react-native';
+import {Image, StyleSheet, View} from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import Typography from '../components/Typography';
 import colors from '../components/constants/colors';
-import {heightSize} from '../utils/utils';
+import { StackParams } from '../utils/types';
+import { widthSize } from '../utils/utils';
 
-export default function ProfileScreen({navigation}) {
+type ScreenProps = NativeStackScreenProps<StackParams, 'Profile'>;
+
+export default function ProfileScreen({navigation}: ScreenProps) {
   return (
     <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#fff',
-      }}>
+      style={styles.container}>
       <Image
-        style={{width: 240, height: 240}}
+        style={styles.image}
         source={require('../../assets/images/Invest.png')}
       />
       <Typography
         type="heading"
         size="xxlarge"
-        style={{color: colors.neutral700, marginTop: heightSize(20)}}>
+        style={styles.text}>
         Coming Soon
       </Typography>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  image: {
+    width: 240,
+    height: 240,
+  },
+  text: {
+    color: colors.neutral700,
+    marginTop: 20,
+  } 
+})

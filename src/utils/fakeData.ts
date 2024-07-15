@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 
-export const generateFakeNewsFeedData = (num: number) => {
+export const generateFakeFeedData = (num: number) => {
   const fakeData = [];
   for (let i = 0; i < num; i++) {
     fakeData.push({
@@ -12,7 +12,7 @@ export const generateFakeNewsFeedData = (num: number) => {
       post_content: faker.lorem.paragraph(),
       post_topic: faker.lorem.word(),
       post_upvote: faker.number.int({ min: 0, max: 1000 }),
-      post_downvote: faker.number.int({ min: 0, max: 1000 }),
+      post_retweet: faker.number.int({ min: 0, max: 1000 }),
       post_comment: faker.number.int({ min: 0, max: 500 }),
     });
   }

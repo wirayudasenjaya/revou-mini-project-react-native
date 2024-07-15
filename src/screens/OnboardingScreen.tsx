@@ -16,12 +16,11 @@ import Button from '../components/molecules/Button';
 import { StackParams } from '../utils/types';
 
 const screenWidth = Dimensions.get('screen').width;
-const screenHeight = Dimensions.get('screen').height;
 
 type ScreenProps = NativeStackScreenProps<StackParams, 'Onboarding'>;
 
 export default function OnboardingScreen({navigation}: ScreenProps) {
-  const flatListRef = useRef(null);
+  const flatListRef = useRef<FlatList>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const {height, width} = useWindowDimensions();
 
@@ -95,7 +94,7 @@ export default function OnboardingScreen({navigation}: ScreenProps) {
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                gap: (screenWidth / 360) * 4,
+                gap: 4,
               }}>
               {data.map((_, index) => (
                 <View
@@ -112,7 +111,6 @@ export default function OnboardingScreen({navigation}: ScreenProps) {
                 />
               ))}
             </View>
-            <View style={{marginVertical: 42}} />
           </View>
         )}
         keyExtractor={item => item.title}
@@ -138,14 +136,13 @@ export default function OnboardingScreen({navigation}: ScreenProps) {
 
 const styles = StyleSheet.create({
   mainBackground: {
-    height: screenHeight,
+    flex: 1,
     backgroundColor: 'white',
   },
   contentContainer: {
     width: screenWidth,
-    flex: 1,
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
   },
   image: {
     width: 240,
@@ -156,7 +153,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     width: '100%',
-    flex: 1,
+    marginBottom: 44,
     paddingHorizontal: 20,
   },
 });
