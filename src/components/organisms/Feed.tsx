@@ -15,7 +15,6 @@ import Typography from '../Typography';
 import colors from '../constants/colors';
 import {FeedProps} from '../../utils/types';
 import PostCard from './PostCard';
-import { useState } from 'react';
 
 export default function Feed({
   data,
@@ -25,7 +24,6 @@ export default function Feed({
   refreshing,
   onRefresh,
 }: FeedProps) {
-  const [feedData, setFeedData] = useState<any>([]);
   dayjs.locale('id');
   dayjs.extend(relativeTime);
 
@@ -56,7 +54,7 @@ export default function Feed({
             nestedScrollEnabled={true}
             refreshControl={
               <RefreshControl
-                colors={['#9Bd35A', '#689F38']}
+                colors={[colors.neutral700]}
                 refreshing={refreshing}
                 onRefresh={onRefresh}
               />
@@ -84,7 +82,7 @@ export default function Feed({
           />
         </View>
       )}
-     {login === 'guest' && <View
+     {(login === 'guest' && !loading) &&  <View
         style={styles.bottomBanner}>
         <Image
           source={require('../../../assets/images/Investly_Mascot_1.png')}

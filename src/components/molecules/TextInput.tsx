@@ -83,7 +83,7 @@ export default function TextField({
           }}
         />
         {type === 'password' && (
-          <TouchableOpacity onPress={() => setIsVisible(!isVisible)}>
+          <TouchableOpacity style={{ padding: 5 }} onPress={() => setIsVisible(!isVisible)}>
             <Icon name="eye" />
           </TouchableOpacity>
         )}

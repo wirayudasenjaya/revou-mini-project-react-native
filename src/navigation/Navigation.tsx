@@ -12,12 +12,8 @@ import CreatePostScreen from '../screens/CreatePostScreen';
 import DetailPostScreen from '../screens/DetailPostScreen';
 import colors from '../components/constants/colors';
 import Icon from '../components/atom/Icon/Icon';
-import {useContext} from 'react';
-import {AuthContext} from '../utils/authContext';
 
 export default function AppNavigation() {
-  const {state} = useContext(AuthContext);
-
   const Stack = createNativeStackNavigator<StackParams>();
   const Tab = createBottomTabNavigator<StackParams>();
 
@@ -60,18 +56,11 @@ export default function AppNavigation() {
         screenOptions={{
           headerShown: false,
         }}>
-        {state.isLoggedIn ? (
-          <>
-            <Stack.Screen name="HomeTabs" component={HomeTabs} />
-            <Stack.Screen name="Create" component={CreatePostScreen} />
-            <Stack.Screen name="Detail" component={DetailPostScreen} />
-          </>
-        ) : (
-          <>
-            <Stack.Screen name="Onboarding" component={OnboardingScreen} />
-            <Stack.Screen name="Login" component={LoginScreen} />
-          </>
-        )}
+        <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="HomeTabs" component={HomeTabs} />
+        <Stack.Screen name="Create" component={CreatePostScreen} />
+        <Stack.Screen name="Detail" component={DetailPostScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

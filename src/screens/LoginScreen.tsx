@@ -17,8 +17,6 @@ import InvestlyLogo from '../components/atom/Icon/Investly';
 import ChevronLeft from '../components/atom/Icon/ChevronLeft';
 import {InputStateProps, StackParams} from '../utils/types';
 import {UserContext} from '../utils/userContext';
-import Label from '../components/molecules/Label';
-import {AuthContext} from '../utils/authContext';
 
 const screenHeight = Dimensions.get('screen').height;
 
@@ -26,7 +24,6 @@ type ScreenProps = NativeStackScreenProps<StackParams, 'Login'>;
 
 export default function LoginScreen({navigation}: ScreenProps) {
   const {setUser} = useContext(UserContext);
-  const {login} = useContext(AuthContext);
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,64}$/;
@@ -62,9 +59,9 @@ export default function LoginScreen({navigation}: ScreenProps) {
   const handleLogin = () => {
     if (email.includes('@test.app') && password === 'TestApp123!') {
       setUser(email);
-      login();
+      navigation.replace('HomeTabs');
     } else {
-      Alert.alert('Login Error', 'Invalid credentials')
+      Alert.alert('Login Error', 'Invalid credentials');
     }
   };
 
@@ -78,11 +75,12 @@ export default function LoginScreen({navigation}: ScreenProps) {
                 flexDirection: 'row',
                 alignItems: 'center',
               }}>
-              <TouchableOpacity
-                style={{flex: 1, alignItems: 'flex-start'}}
-                onPress={() => navigation.navigate('Onboarding')}>
-                <ChevronLeft />
-              </TouchableOpacity>
+              <View style={{flex: 1, alignItems: 'flex-start'}}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('Onboarding')}>
+                  <ChevronLeft />
+                </TouchableOpacity>
+              </View>
               <View style={{flex: 1, alignItems: 'center'}}>
                 <InvestlyLogo width={24} height={24} />
               </View>
@@ -94,7 +92,7 @@ export default function LoginScreen({navigation}: ScreenProps) {
                   disabled={false}
                   onPress={() => {
                     setUser('guest');
-                    login();
+                    navigation.replace('HomeTabs');
                   }}>
                   <Typography
                     type="heading"

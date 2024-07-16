@@ -26,55 +26,18 @@ import Button from '../components/molecules/Button';
 import {generateFakeFeedData} from '../utils/fakeData';
 import {FeedProps, PostProps, StackParams} from '../utils/types';
 import {UserContext} from '../utils/userContext';
-import { PostContext } from '../utils/postContext';
+import {PostContext} from '../utils/postContext';
 
 const screenWidth = Dimensions.get('window').width;
 
 type ScreenProps = NativeStackScreenProps<StackParams, 'Home'>;
 
-const TrendingPage = memo(
-  ({
-    data,
-    loading,
-    login,
-    navigation,
-    onRefresh,
-    refreshing,
-  }: FeedProps) => (
-    <Feed
-      loading={loading}
-      data={data}
-      login={login}
-      navigation={navigation}
-      refreshing={refreshing}
-      onRefresh={onRefresh}
-    />
-  ),
-);
-
-const NewestPage = memo(
-  ({
-    data,
-    loading,
-    login,
-    navigation,
-    onRefresh,
-    refreshing,
-  }: FeedProps) => (
-    <Feed
-      loading={loading}
-      data={data}
-      login={login}
-      navigation={navigation}
-      refreshing={refreshing}
-      onRefresh={onRefresh}
-    />
-  ),
-);
+const TrendingPage = memo((props: FeedProps) => <Feed {...props} />);
+const NewestPage = memo((props: FeedProps) => <Feed {...props} />);
 
 export default function HomeScreen({navigation}: ScreenProps) {
-  const { user } = useContext(UserContext);
-  const { posts } = useContext(PostContext);
+  const {user} = useContext(UserContext);
+  const {posts} = useContext(PostContext);
   const [index, setIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -98,7 +61,7 @@ export default function HomeScreen({navigation}: ScreenProps) {
   }, [data, posts]);
 
   const renderScene = useCallback(
-    ({route}) => {
+    ({route}: any) => {
       switch (route.key) {
         case 'trending':
           return (
@@ -129,10 +92,10 @@ export default function HomeScreen({navigation}: ScreenProps) {
     [loading, trendingData, newestData],
   );
 
-  const renderTabBar = useCallback(props => {
+  const renderTabBar = useCallback((props: any) => {
     return (
       <View style={styles.tabBar}>
-        {props.navigationState.routes.map((route, i: number) => {
+        {props.navigationState.routes.map((route: any, i: number) => {
           const isActive = props.navigationState.index === i;
           return (
             <TouchableOpacity
@@ -180,10 +143,10 @@ export default function HomeScreen({navigation}: ScreenProps) {
     } else {
       navigation.navigate('Create');
     }
-  }
+  };
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={styles.flexContainer}>
       <View style={styles.card}>
         <View style={styles.cardTopContent}>
           <Avatar
@@ -203,7 +166,7 @@ export default function HomeScreen({navigation}: ScreenProps) {
           </View>
         </View>
         <View style={styles.cardBottomContent}>
-          <View style={{width: '45%'}}>
+          <View style={styles.cardBottomContentButton}>
             <Button
               type="icon-left"
               variant="link"
@@ -220,7 +183,7 @@ export default function HomeScreen({navigation}: ScreenProps) {
             </Button>
           </View>
           <View style={styles.verticalDivider} />
-          <View style={{width: '45%'}}>
+          <View style={styles.cardBottomContentButton}>
             <Button
               type="icon-left"
               variant="link"
@@ -239,7 +202,7 @@ export default function HomeScreen({navigation}: ScreenProps) {
         </View>
       </View>
 
-      <View style={{flex: 1}}>
+      <View style={styles.flexContainer}>
         <TabView
           navigationState={{index, routes}}
           renderScene={renderScene}
@@ -253,6 +216,9 @@ export default function HomeScreen({navigation}: ScreenProps) {
 }
 
 const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 1
+  },
   card: {
     marginHorizontal: 12,
     marginVertical: 16,
@@ -267,13 +233,16 @@ const styles = StyleSheet.create({
   },
   cardInputContainer: {
     flex: 1,
-    paddingHorizontal: 8
+    paddingHorizontal: 8,
   },
   cardBottomContent: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
     marginTop: 16,
+  },
+  cardBottomContentButton: {
+    width: '45%',
   },
   verticalDivider: {
     width: 1,
