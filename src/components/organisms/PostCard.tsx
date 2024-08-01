@@ -18,13 +18,13 @@ export default function PostCard({post, onPress}: PostCardProps) {
   return (
     <View style={styles.newsCard}>
       <View style={styles.newsCardTop}>
-        <Avatar size="large" state="photo" photo={post.avatar_url} />
+        <Avatar size="large" state="photo" photo={post.user?.profile_path || ''} />
         <View style={{flex: 1}}>
           <Typography type="heading" size="xsmall" style={styles.title}>
-            {post.name}
+            {post.user?.name || ''}
           </Typography>
           <Typography type="paragraph" size="small" style={styles.subtitle}>
-            {post.headline}
+            {post.user?.headline || ''}
           </Typography>
           <Typography type="paragraph" size="xsmall" style={styles.subtitle}>
             {dayjs().to(dayjs(post.created_at))}
@@ -34,10 +34,14 @@ export default function PostCard({post, onPress}: PostCardProps) {
       </View>
       <View style={{marginTop: 12}}>
         <Typography type="heading" size="medium" style={styles.title}>
-          {post.post_header}
+          {post.header}
         </Typography>
-        <Typography type="paragraph" size="medium" style={styles.title}>
-          {post.post_content}
+        <Typography
+          type="paragraph"
+          size="medium"
+          style={styles.title}
+          numberOfLines={4}>
+          {post.content}
         </Typography>
       </View>
       <View style={{marginVertical: 12}}>
@@ -46,7 +50,7 @@ export default function PostCard({post, onPress}: PostCardProps) {
             type="heading"
             size="xsmall"
             style={{color: colors.green600}}>
-            {post.post_topic}
+            {post.topic?.label}
           </Typography>
         </Label>
       </View>
@@ -69,7 +73,7 @@ export default function PostCard({post, onPress}: PostCardProps) {
               fill={colors.neutral700}
             />
             <Typography type="paragraph" size="small" style={styles.title}>
-              {post.post_upvote}
+              {post.upvotes}
             </Typography>
           </Button>
           <View
@@ -107,7 +111,7 @@ export default function PostCard({post, onPress}: PostCardProps) {
               fill={colors.neutral700}
             />
             <Typography type="paragraph" size="small" style={styles.title}>
-              {post.post_comment}
+              {post.total_comments}
             </Typography>
           </Button>
         </View>
@@ -125,7 +129,7 @@ export default function PostCard({post, onPress}: PostCardProps) {
               fill={colors.neutral700}
             />
             <Typography type="paragraph" size="small" style={styles.title}>
-              {post.post_retweet}
+              {post.reposts}
             </Typography>
           </Button>
         </View>

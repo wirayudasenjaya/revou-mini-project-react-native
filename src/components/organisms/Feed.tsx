@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -15,29 +16,33 @@ import Typography from '../Typography';
 import colors from '../constants/colors';
 import {FeedProps} from '../../utils/types';
 import PostCard from './PostCard';
+import { UserContext } from '../../utils/userContext';
+import { AuthContext } from '../../utils/authContext';
 
 export default function Feed({
   data,
   loading,
-  login,
   navigation,
   refreshing,
   onRefresh,
+  onEndReach,
 }: FeedProps) {
+  const {user} = useContext(UserContext);
+  const {logout} = useContext(AuthContext);
   dayjs.locale('id');
   dayjs.extend(relativeTime);
 
   const handleLoginRedirect = () => {
-    if (login === 'guest') {
-      navigation.replace('Login');
+    if (user === 'guest') {
+      logout();
     }
   };
 
   const viewDetail = (data: any) => {
-    if (login === 'guest') {
-      navigation.replace('Login');
+    if (user === 'guest') {
+      logout();
     } else {
-      navigation.navigate('Detail', {post: data});
+      navigation.navigate('Detail', {id: data});
     }
   };
 
@@ -50,8 +55,8 @@ export default function Feed({
           <FlatList
             data={data}
             showsVerticalScrollIndicator={false}
-            initialNumToRender={5}
             nestedScrollEnabled={true}
+            onEndReached={onEndReach}
             refreshControl={
               <RefreshControl
                 colors={[colors.neutral700]}
@@ -61,7 +66,7 @@ export default function Feed({
             }
             refreshing={refreshing}
             onRefresh={onRefresh}
-            keyExtractor={item => item.post_header}
+            keyExtractor={item => item.id}
             ListFooterComponent={
               <>
                 <View style={styles.seen}>
@@ -75,14 +80,14 @@ export default function Feed({
               </>
             }
             renderItem={({item, index}) => (
-              <TouchableOpacity key={index} onPress={() => viewDetail(item)}>
+              <TouchableOpacity key={index} onPress={() => viewDetail(item.id)}>
                 <PostCard post={item} onPress={handleLoginRedirect} />
               </TouchableOpacity>
             )}
           />
         </View>
       )}
-     {(login === 'guest' && !loading) &&  <View
+     {(user === 'guest' && !loading) &&  <View
         style={styles.bottomBanner}>
         <Image
           source={require('../../../assets/images/Investly_Mascot_1.png')}
