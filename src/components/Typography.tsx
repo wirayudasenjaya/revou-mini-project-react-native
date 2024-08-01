@@ -5,9 +5,10 @@ type TypographyProps = {
   size: 'xxlarge' | 'xlarge' | 'large' | 'medium' | 'small' | 'xsmall' | 'xxsmall';
   children: React.ReactNode;
 	style?: TextStyle;
+  numberOfLines?: number
 };
 
-export default function Typography({ size, type, children, style }: TypographyProps) {
+export default function Typography({ size, type, children, style, numberOfLines }: TypographyProps) {
   const getSizeAndType = () => {
     switch (type) {
       case 'heading':
@@ -57,7 +58,7 @@ export default function Typography({ size, type, children, style }: TypographyPr
     }
   };
 
-  return <Text style={[getSizeAndType(), style]}>{children}</Text>;
+  return <Text style={[getSizeAndType(), style]} numberOfLines={numberOfLines}>{children}</Text>;
 }
 
 const styles = StyleSheet.create({

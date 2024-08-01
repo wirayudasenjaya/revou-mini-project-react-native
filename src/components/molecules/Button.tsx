@@ -155,7 +155,8 @@ const styles = StyleSheet.create({
     color: colors.purple600,
   },
   disabled: {
-    opacity: 0.6,
+    backgroundColor: colors.neutral400,
+    color: 'white'
   },
   iconLeftContainer: {
     flexDirection: 'row',
