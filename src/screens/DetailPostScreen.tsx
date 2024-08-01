@@ -1,33 +1,65 @@
-import {SafeAreaView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {useCallback, useEffect, useState} from 'react';
+import {
+  ActivityIndicator,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 import TextField from '../components/molecules/TextInput';
 import PostCard from '../components/organisms/PostCard';
-import {StackParams} from '../utils/types';
+import {PostProps, StackParams} from '../utils/types';
 import colors from '../components/constants/colors';
 import Button from '../components/molecules/Button';
 import Icon from '../components/atom/Icon/Icon';
 import Typography from '../components/Typography';
+import fetch from '../utils/fetch';
 
 type ScreenProps = NativeStackScreenProps<StackParams, 'Detail'>;
 
 export default function DetailPostScreen({route, navigation}: ScreenProps) {
-  const {post} = route.params;
+  const {id} = route.params;
+  const [data, setData] = useState<PostProps | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const getData = useCallback(() => {
+    fetch.getSocial(`/v1/public/post/${id}`, {
+      success: response => {
+        setData(response.data.data);
+        setLoading(false);
+      },
+      error: error => {
+        console.log(error);
+      },
+    });
+  }, []);
+
+  useEffect(() => {
+    getData();
+  }, [getData]);
 
   return (
     <SafeAreaView style={styles.screenContainer}>
       <View style={{paddingTop: 24}}>
-        <View
-          style={styles.topMenu}>
+        <View style={styles.topMenu}>
           <TouchableOpacity onPress={() => navigation.navigate('HomeTabs')}>
             <Icon name="chevron-left" width={20} height={20} />
           </TouchableOpacity>
-          <Typography type="heading" size="medium" style={{flex: 1, color: colors.neutral700}}>
+          <Typography
+            type="heading"
+            size="medium"
+            style={{flex: 1, color: colors.neutral700}}>
             Post
           </Typography>
         </View>
 
-        <PostCard post={post} onPress={() => {}} />
+        {loading ? (
+          <ActivityIndicator size="large" />
+        ) : (
+          <PostCard post={data} onPress={() => {}} />
+        )}
       </View>
 
       <View style={styles.bottomBar}>

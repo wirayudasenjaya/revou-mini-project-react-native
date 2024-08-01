@@ -8,12 +8,12 @@ import {
   StyleSheet,
   useWindowDimensions,
 } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 import Typography from '../components/Typography';
 import colors from '../components/constants/colors';
 import Button from '../components/molecules/Button';
-import { StackParams } from '../utils/types';
+import {StackParams} from '../utils/types';
 
 const screenWidth = Dimensions.get('screen').width;
 
@@ -63,58 +63,53 @@ export default function OnboardingScreen({navigation}: ScreenProps) {
 
   return (
     <SafeAreaView style={styles.mainBackground}>
-      <FlatList
-        ref={flatListRef}
-        data={data}
-        horizontal={true}
-        snapToAlignment="start"
-        decelerationRate={'fast'}
-        snapToInterval={width}
-        onMomentumScrollEnd={handleOnMomentumEnd}
-        showsHorizontalScrollIndicator={false}
-        renderItem={({item}) => (
-          <View style={styles.contentContainer}>
-            <Image style={styles.image} source={item.image} />
-            <View style={styles.contentGap} />
-            <Typography
-              type="heading"
-              size="xlarge"
-              style={{color: colors.neutral700}}>
-              {item.title}
-            </Typography>
-            <View style={styles.contentGap} />
-            <Typography
-              type="paragraph"
-              size="medium"
-              style={{textAlign: 'center', color: colors.neutral700}}>
-              {item.description}
-            </Typography>
-            <View style={{marginVertical: 13}} />
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: 4,
-              }}>
-              {data.map((_, index) => (
-                <View
-                  key={index}
-                  style={{
-                    backgroundColor:
-                      index === currentIndex
-                        ? colors.purple600
-                        : colors.purple100,
-                    width: index === currentIndex ? 16 : 8,
-                    height: 8,
-                    borderRadius: 50,
-                  }}
-                />
-              ))}
+      <View style={styles.contentContainer}>
+        <FlatList
+          ref={flatListRef}
+          data={data}
+          horizontal
+          pagingEnabled
+          onMomentumScrollEnd={handleOnMomentumEnd}
+          showsHorizontalScrollIndicator={false}
+          renderItem={({item}) => (
+            <View style={[styles.contentItem, {width}]}>
+              <Image
+                style={styles.image}
+                source={item.image}
+                resizeMode="contain"
+              />
+              <View style={styles.contentGap} />
+              <Typography
+                type="heading"
+                size="xlarge"
+                style={{color: colors.neutral700}}>
+                {item.title}
+              </Typography>
+              <View style={styles.contentGap} />
+              <Typography
+                type="paragraph"
+                size="medium"
+                style={{textAlign: 'center', color: colors.neutral700}}>
+                {item.description}
+              </Typography>
             </View>
-          </View>
-        )}
-        keyExtractor={item => item.title}
-      />
+          )}
+          keyExtractor={item => item.title}
+        />
+        <View style={styles.paginationContainer}>
+          {data.map((_, index) => (
+            <View
+              key={index}
+              style={[
+                styles.page,
+                index === currentIndex
+                  ? styles.activePage
+                  : styles.inactivePage,
+              ]}
+            />
+          ))}
+        </View>
+      </View>
       <View style={styles.buttonContainer}>
         <Button
           variant="primary"
@@ -138,11 +133,16 @@ const styles = StyleSheet.create({
   mainBackground: {
     flex: 1,
     backgroundColor: 'white',
+    justifyContent: 'space-between',
   },
   contentContainer: {
-    width: screenWidth,
-    alignItems: 'center',
+    flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
+  },
+  contentItem: {
+    alignItems: 'center',
+    justifyContent: 'flex-end',
   },
   image: {
     width: 240,
@@ -151,9 +151,28 @@ const styles = StyleSheet.create({
   contentGap: {
     marginVertical: 8,
   },
+  paginationContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    marginTop: 16,
+  },
+  page: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginHorizontal: 4,
+  },
+  activePage: {
+    backgroundColor: colors.purple600,
+    width: 16,
+  },
+  inactivePage: {
+    backgroundColor: colors.purple100,
+  },
   buttonContainer: {
-    width: '100%',
-    marginBottom: 44,
     paddingHorizontal: 20,
+    paddingBottom: 44,
   },
 });

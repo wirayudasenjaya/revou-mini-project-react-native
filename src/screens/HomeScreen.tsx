@@ -1,11 +1,4 @@
-import React, {
-  memo,
-  useState,
-  useEffect,
-  useMemo,
-  useCallback,
-  useContext,
-} from 'react';
+import React, {memo, useState, useCallback, useContext} from 'react';
 import {
   Dimensions,
   SafeAreaView,
@@ -21,75 +14,45 @@ import colors from '../components/constants/colors';
 import TextField from '../components/molecules/TextInput';
 import Avatar from '../components/molecules/Avatar';
 import Icon from '../components/atom/Icon/Icon';
-import Feed from '../components/organisms/Feed';
 import Button from '../components/molecules/Button';
-import {generateFakeFeedData} from '../utils/fakeData';
-import {FeedProps, PostProps, StackParams} from '../utils/types';
+import {StackParams} from '../utils/types';
 import {UserContext} from '../utils/userContext';
-import {PostContext} from '../utils/postContext';
+import {AuthContext} from '../utils/authContext';
+import TrendingList from '../components/organisms/TrendingList';
+import NewestList from '../components/organisms/NewestList';
 
 const screenWidth = Dimensions.get('window').width;
 
 type ScreenProps = NativeStackScreenProps<StackParams, 'Home'>;
 
-const TrendingPage = memo((props: FeedProps) => <Feed {...props} />);
-const NewestPage = memo((props: FeedProps) => <Feed {...props} />);
+const TrendingPage = memo(({navigation}: any) => (
+  <TrendingList navigation={navigation} />
+));
+const NewestPage = memo(({navigation}: any) => (
+  <NewestList navigation={navigation} />
+));
 
 export default function HomeScreen({navigation}: ScreenProps) {
   const {user} = useContext(UserContext);
-  const {posts} = useContext(PostContext);
+  const {logout} = useContext(AuthContext);
   const [index, setIndex] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
   const [routes] = useState([
     {key: 'trending', title: 'Trending'},
     {key: 'terbaru', title: 'Terbaru'},
   ]);
-  const [trendingData, setTrendingData] = useState<PostProps[]>([]);
-  const [newestData, setNewestData] = useState<PostProps[]>([]);
-  const data = useMemo(() => generateFakeFeedData(100), []);
-
-  useEffect(() => {
-    const feeds = [...data, ...posts];
-    const trending = [...feeds].sort((a, b) => b.post_upvote - a.post_upvote);
-    const newest = [...feeds].sort((a, b) =>
-      b.created_at > a.created_at ? 1 : -1,
-    );
-    setTrendingData(trending);
-    setNewestData(newest);
-    setLoading(false);
-  }, [data, posts]);
 
   const renderScene = useCallback(
     ({route}: any) => {
       switch (route.key) {
         case 'trending':
-          return (
-            <TrendingPage
-              loading={loading}
-              data={trendingData}
-              login={user}
-              navigation={navigation}
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-            />
-          );
+          return <TrendingPage navigation={navigation} />;
         case 'terbaru':
-          return (
-            <NewestPage
-              loading={loading}
-              data={newestData}
-              login={user}
-              navigation={navigation}
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-            />
-          );
+          return <NewestPage navigation={navigation} />;
         default:
           return null;
       }
     },
-    [loading, trendingData, newestData],
+    [],
   );
 
   const renderTabBar = useCallback((props: any) => {
@@ -118,28 +81,9 @@ export default function HomeScreen({navigation}: ScreenProps) {
     );
   }, []);
 
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    const newData = generateFakeFeedData(100);
-    const feeds = [...newData, ...posts];
-    const trending = [...feeds].sort((a, b) => b.post_upvote - a.post_upvote);
-    const newest = [...feeds].sort((a, b) =>
-      b.created_at > a.created_at ? 1 : -1,
-    );
-    setTrendingData(trending);
-    setNewestData(newest);
-    setRefreshing(false);
-  }, [data, posts]);
-
-  const handleLoginRedirect = () => {
-    if (user === 'guest') {
-      navigation.replace('Login');
-    }
-  };
-
   const createPost = () => {
     if (user === 'guest') {
-      navigation.replace('Login');
+      logout();
     } else {
       navigation.navigate('Create');
     }
@@ -217,7 +161,7 @@ export default function HomeScreen({navigation}: ScreenProps) {
 
 const styles = StyleSheet.create({
   flexContainer: {
-    flex: 1
+    flex: 1,
   },
   card: {
     marginHorizontal: 12,
