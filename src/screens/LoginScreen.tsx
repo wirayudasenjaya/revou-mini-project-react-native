@@ -1,5 +1,6 @@
-import {useContext, useState} from 'react';
+import {useCallback, useContext, useState} from 'react';
 import {
+  ActivityIndicator,
   Alert,
   Dimensions,
   SafeAreaView,
@@ -8,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import analytics from '@react-native-firebase/analytics';
 
 import Typography from '../components/Typography';
 import Button from '../components/molecules/Button';
@@ -17,6 +19,9 @@ import InvestlyLogo from '../components/atom/Icon/Investly';
 import ChevronLeft from '../components/atom/Icon/ChevronLeft';
 import {InputStateProps, StackParams} from '../utils/types';
 import {UserContext} from '../utils/userContext';
+import fetch from '../utils/fetch';
+import {storageService} from '../services';
+import {AuthContext} from '../utils/authContext';
 
 const screenHeight = Dimensions.get('screen').height;
 
@@ -24,6 +29,7 @@ type ScreenProps = NativeStackScreenProps<StackParams, 'Login'>;
 
 export default function LoginScreen({navigation}: ScreenProps) {
   const {setUser} = useContext(UserContext);
+  const {login} = useContext(AuthContext);
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,64}$/;
@@ -35,6 +41,7 @@ export default function LoginScreen({navigation}: ScreenProps) {
     useState<InputStateProps>('default');
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleEmailBlur = () => {
     if (emailRegex.test(email)) {
@@ -56,14 +63,26 @@ export default function LoginScreen({navigation}: ScreenProps) {
     }
   };
 
-  const handleLogin = () => {
-    if (email.includes('@test.app') && password === 'TestApp123!') {
-      setUser(email);
-      navigation.replace('HomeTabs');
-    } else {
-      Alert.alert('Login Error', 'Invalid credentials');
-    }
-  };
+  const handleLogin = useCallback(() => {
+    setLoading(true);
+    fetch.postAuth(
+      '/v2/login',
+      {
+        email,
+        password,
+      },
+      {
+        success: response => {
+          storageService.set('IS_LOGIN', true);
+          login();
+        },
+        error: error => {
+          Alert.alert('Login Error', 'Invalid credentials');
+          setLoading(false);
+        },
+      },
+    );
+  }, [email, password]);
 
   return (
     <SafeAreaView style={styles.mainBackground}>
@@ -77,7 +96,7 @@ export default function LoginScreen({navigation}: ScreenProps) {
               }}>
               <View style={{flex: 1, alignItems: 'flex-start'}}>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('Onboarding')}>
+                  onPress={() => navigation.goBack()}>
                   <ChevronLeft />
                 </TouchableOpacity>
               </View>
@@ -92,7 +111,7 @@ export default function LoginScreen({navigation}: ScreenProps) {
                   disabled={false}
                   onPress={() => {
                     setUser('guest');
-                    navigation.replace('HomeTabs');
+                    login();
                   }}>
                   <Typography
                     type="heading"
@@ -130,27 +149,50 @@ export default function LoginScreen({navigation}: ScreenProps) {
             onBlur={handlePasswordBlur}
           />
           <View style={{marginVertical: 8}} />
-          <TouchableOpacity>
+          <TouchableOpacity style={{marginBottom: 24}}>
             <Typography type="heading" size="xsmall" style={{color: '#4343EF'}}>
               Lupa Password
             </Typography>
           </TouchableOpacity>
-        </View>
-        <View style={{flex: 1, width: '100%'}}>
           <Button
             variant="primary"
             type="text"
             size="large"
             disabled={!isEmailValid || !isPasswordValid}
             onPress={handleLogin}>
+            {loading ? (
+              <ActivityIndicator size="small" color='white' />
+            ) : (
+              <Typography
+                type="heading"
+                size="medium"
+                style={{
+                  color: colors.neutral100,
+                  textAlign: 'center',
+                }}>
+                Masuk
+              </Typography>
+            )}
+          </Button>
+        </View>
+        <View style={{flex: 1, width: '100%'}}>
+          <Button
+            variant="outline"
+            type="text"
+            size="large"
+            disabled={false}
+            onPress={async () => {
+              await analytics().logEvent('click_register_button');
+              navigation.navigate('Register');
+            }}>
             <Typography
               type="heading"
               size="medium"
               style={{
-                color: colors.neutral100,
+                color: colors.purple600,
                 textAlign: 'center',
               }}>
-              Masuk
+              Daftar
             </Typography>
           </Button>
         </View>
