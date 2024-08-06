@@ -5,6 +5,7 @@ import {RegisterComponentProps} from '../../utils/types';
 
 export default function RegisterStep2({
   registerData,
+  errorMessage,
   handleInputChange,
   handleInputBlur,
   inputStates,
@@ -25,7 +26,7 @@ export default function RegisterStep2({
         state={inputStates.username}
         type="text"
         label="Username"
-        message="Invalid username format"
+        message={errorMessage.username}
         value={registerData.username}
         onChangeText={text => handleInputChange('username', text)}
         onBlur={() => handleInputBlur('username')}

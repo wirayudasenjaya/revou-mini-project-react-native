@@ -5,6 +5,7 @@ import {RegisterComponentProps} from '../../utils/types';
 
 export default function RegisterStep1({
   registerData,
+  errorMessage,
   handleInputChange,
   handleInputBlur,
   inputStates,
@@ -16,7 +17,7 @@ export default function RegisterStep1({
         type="email"
         label="Email"
         placeholder="Masukkan email kamu"
-        message="Invalid email format"
+        message={errorMessage.email}
         value={registerData.email}
         onChangeText={text => handleInputChange('email', text)}
         onBlur={() => handleInputBlur('email')}
@@ -27,7 +28,7 @@ export default function RegisterStep1({
         type="password"
         label="Password"
         placeholder="Masukkan Password kamu"
-        message="Invalid password format"
+        message={errorMessage.password}
         value={registerData.password}
         onChangeText={text => handleInputChange('password', text)}
         onBlur={() => handleInputBlur('password')}
@@ -38,7 +39,7 @@ export default function RegisterStep1({
         type="password"
         label="Konfirmasi Password"
         placeholder="Masukkan konfirmasi password"
-        message="Invalid password format"
+        message={errorMessage.confirmPassword}
         value={registerData.confirmPassword}
         onChangeText={text => handleInputChange('confirmPassword', text)}
         onBlur={() => handleInputBlur('confirmPassword')}

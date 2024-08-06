@@ -75,8 +75,48 @@ export default function RegisterScreen({navigation}: ScreenProps) {
   const handleInputChange = useCallback(
     (key: keyof RegisterDataProps, value: string) => {
       setRegisterData(prev => ({...prev, [key]: value}));
+      
+      if (key === 'email') {
+        if (!emailRegex.test(value)) {
+          setInputStates(prevStates => ({...prevStates, email: 'negative'}));
+          setErrorMessage(prevStates => ({...prevStates, email: 'Format Email Tidak Sesuai'}));
+        } else {
+          setInputStates(prevStates => ({...prevStates, email: 'positive'}));
+          setErrorMessage(prevStates => ({...prevStates, email: ''}));
+        }
+      }
+      
+      if (key === 'password') {
+        if (!passwordRegex.test(value)) {
+          setInputStates(prevStates => ({...prevStates, password: 'negative'}));
+          setErrorMessage(prevStates => ({...prevStates, password: 'Format Password Tidak Sesuai'}));
+        } else {
+          setInputStates(prevStates => ({...prevStates, password: 'positive'}));
+          setErrorMessage(prevStates => ({...prevStates, password: ''}));
+        }
+      }
+      
+      if (key === 'confirmPassword') {
+        if (value !== registerData.password || !passwordRegex.test(value)) {
+          setInputStates(prevStates => ({...prevStates, confirmPassword: 'negative'}));
+          setErrorMessage(prevStates => ({...prevStates, confirmPassword: 'Konfirmasi Password Tidak Sesuai'}));
+        } else {
+          setInputStates(prevStates => ({...prevStates, confirmPassword: 'positive'}));
+          setErrorMessage(prevStates => ({...prevStates, confirmPassword: ''}));
+        }
+      }
+
+      if (key === 'name') {
+        if (registerData.name.trim().length >= 3) {
+          setInputStates(prevStates => ({...prevStates, name: 'negative'}));
+          setErrorMessage(prevStates => ({...prevStates, name: 'Nama harus memiliki minimal 3 karakter'}));
+        } else {
+          setInputStates(prevStates => ({...prevStates, name: 'positive'}));
+          setErrorMessage(prevStates => ({...prevStates, name: ''}));
+        }
+      }
     },
-    [],
+    [registerData.password],
   );
 
   const handleInputBlur = useCallback(
@@ -101,12 +141,14 @@ export default function RegisterScreen({navigation}: ScreenProps) {
                   email: 'negative',
                 }));
                 setIsValid(prevValid => ({...prevValid, email: false}));
+                setErrorMessage(prevStates => ({...prevStates, email: error.response.data.messages}))
                 analytics().logEvent('failed_validate_register_email');
               },
             },
           );
         } else {
           setInputStates(prevStates => ({...prevStates, email: 'negative'}));
+          setErrorMessage(prevStates => ({...prevStates, email: 'Format Email Tidak Sesuai'}));
           setIsValid(prevValid => ({...prevValid, email: false}));
         }
       } else {
@@ -123,6 +165,7 @@ export default function RegisterScreen({navigation}: ScreenProps) {
                 ...prevStates,
                 password: 'negative',
               }));
+              setErrorMessage(prevStates => ({...prevStates, password: 'Format Password Tidak Sesuai'}));
               setIsValid(prevValid => ({...prevValid, password: false}));
             }
             break;
@@ -141,6 +184,7 @@ export default function RegisterScreen({navigation}: ScreenProps) {
                 ...prevStates,
                 confirmPassword: 'negative',
               }));
+              setErrorMessage(prevStates => ({...prevStates, confirmPassword: 'Konfirmasi Password Tidak Sesuai'}));
               setIsValid(prevValid => ({...prevValid, confirmPassword: false}));
             }
             break;
@@ -156,6 +200,7 @@ export default function RegisterScreen({navigation}: ScreenProps) {
                 ...prevStates,
                 name: 'negative',
               }));
+              setErrorMessage(prevStates => ({...prevStates, name: 'Nama harus memiliki minimal 3 karakter'}));
               setIsValid(prevValid => ({...prevValid, name: false}));
             }
             break;
@@ -166,11 +211,13 @@ export default function RegisterScreen({navigation}: ScreenProps) {
                 username: 'default',
               }));
               fetch.getSocialDev(`/v1/public/username/${registerData.username}`, {
-                success: () => {
+                success: response => {
+                  console.log(response.data)
                   setInputStates(prevStates => ({
                     ...prevStates,
                     username: 'negative',
                   }));
+                  setErrorMessage(prevStates => ({...prevStates, username: response.data.messages}));
                   setIsValid(prevValid => ({...prevValid, username: false}));
                 },
                 error: () => {
@@ -259,7 +306,6 @@ export default function RegisterScreen({navigation}: ScreenProps) {
         };
         fetch.postAuth('/v4/register', insertValue, {
           success: async (response) => {
-            console.log(response.data);
             await analytics().logEvent('success_register_account', {
               email: registerData.email,
               name: registerData.name,
@@ -268,12 +314,11 @@ export default function RegisterScreen({navigation}: ScreenProps) {
               topic_name: selectedTopic.map(topic => topic.label)
             });
             await handleDisplayNotification();
-            storageService.set('IS_LOGIN', true);
-            storageService.set('AUTH_TOKEN', 'token');
-            login();
+            storageService.login();
+            storageService.setToken(response.data.data.access_token)
+            login(response.data.data.access_token);
           },
           error: async (error) => {
-            console.log(insertValue);
             await analytics().logEvent('failed_register_account', {
               email: registerData.email,
               name: registerData.name,
@@ -335,7 +380,6 @@ export default function RegisterScreen({navigation}: ScreenProps) {
   useEffect(() => {
     fetch.getSocialDev(`v1/public/masterdata/topic`, {
       success: response => {
-        console.log('sukses')
         setTopic(response.data.data);
       },
       error: error => {
@@ -365,6 +409,7 @@ export default function RegisterScreen({navigation}: ScreenProps) {
                   }}>
                   <View
                     style={{
+                      flex: 1,
                       flexDirection: 'row',
                       alignItems: 'center',
                     }}>
@@ -404,6 +449,7 @@ export default function RegisterScreen({navigation}: ScreenProps) {
                 <View style={{width, paddingHorizontal: 20}}>
                   <item.component
                     registerData={registerData}
+                    errorMessage={errorMessage}
                     handleInputChange={handleInputChange}
                     handleInputBlur={handleInputBlur}
                     inputStates={inputStates}

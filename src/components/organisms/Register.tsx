@@ -7,12 +7,14 @@ import RegisterStep3 from './RegisterStep3';
 
 const CreateAccount: React.FC<RegisterComponentProps> = ({
   registerData,
+  errorMessage,
   handleInputChange,
   handleInputBlur,
   inputStates,
 }) => (
   <RegisterStep1
     registerData={registerData}
+    errorMessage={errorMessage}
     handleInputChange={handleInputChange}
     handleInputBlur={handleInputBlur}
     inputStates={inputStates}
@@ -21,12 +23,14 @@ const CreateAccount: React.FC<RegisterComponentProps> = ({
 
 const AddNameUsername: React.FC<RegisterComponentProps> = ({
   registerData,
+  errorMessage,
   handleInputChange,
   handleInputBlur,
   inputStates,
 }) => (
   <RegisterStep2
     registerData={registerData}
+    errorMessage={errorMessage}
     handleInputChange={handleInputChange}
     handleInputBlur={handleInputBlur}
     inputStates={inputStates}
