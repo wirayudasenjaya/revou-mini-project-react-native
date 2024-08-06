@@ -5,7 +5,7 @@ import { storageService } from '../services';
 
 type AuthContextProps = {
   state: AuthState;
-  login: () => Promise<void>;
+  login: (token: string) => Promise<void>;
   logout: () => void;
 };
 
@@ -17,11 +17,13 @@ const AuthReducer = (state: AuthState, action: AuthAction) => {
       return {
         ...state,
         isLoggedIn: true,
+        token: action.payload
       };
     case 'LOGOUT':
       return {
         ...state,
         isLoggedIn: false,
+        token: null
       };
     default:
       return state;
@@ -31,16 +33,18 @@ const AuthReducer = (state: AuthState, action: AuthAction) => {
 const AuthProvider = ({children}: {children: ReactNode}) => {
   const [state, dispatch] = useReducer(AuthReducer, {
     isLoggedIn: false,
+    token: null,
   });
 
   useEffect(() => {
     let loggedIn;
+    let accessToken;
 
     try {
-      loggedIn = storageService.getBoolean('IS_LOGIN');
-      console.log('AM I LOGGED IN', loggedIn)
-      if(loggedIn) {
-        dispatch({type: 'LOGIN'})
+      loggedIn = storageService.isLoggedIn();
+      accessToken = storageService.getToken();
+      if(loggedIn && accessToken) {
+        dispatch({type: 'LOGIN', payload: accessToken})
       } else {
         // dispatch({type: 'LOGOUT'})
       }
@@ -51,7 +55,7 @@ const AuthProvider = ({children}: {children: ReactNode}) => {
 
   const authContext = useMemo(
     () => ({
-      login: async () => dispatch({type: 'LOGIN'}),
+      login: async (token: string) => dispatch({type: 'LOGIN', payload: token}),
       logout: () => dispatch({type: 'LOGOUT'}),
     }),
     [],

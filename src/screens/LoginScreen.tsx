@@ -73,10 +73,12 @@ export default function LoginScreen({navigation}: ScreenProps) {
       },
       {
         success: response => {
-          storageService.set('IS_LOGIN', true);
-          login();
+          storageService.setToken(response.data.data.access_token)
+          storageService.login();
+          login(response.data.data.access_token);
         },
         error: error => {
+          console.log(error)
           Alert.alert('Login Error', 'Invalid credentials');
           setLoading(false);
         },
@@ -111,7 +113,7 @@ export default function LoginScreen({navigation}: ScreenProps) {
                   disabled={false}
                   onPress={() => {
                     setUser('guest');
-                    login();
+                    login('');
                   }}>
                   <Typography
                     type="heading"
