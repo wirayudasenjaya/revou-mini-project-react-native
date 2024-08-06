@@ -1,8 +1,10 @@
 import axios from 'axios';
+import {storageService} from '../services';
+import Config from 'react-native-config';
 
-const authApiUrl = 'https://develop.investly.id/api/auth';
+const authApiUrl = Config.AUTH_API_URL;
 const socialApiUrl = 'https://api.investly.id/api/social';
-const socialDevUrl = 'https://develop.investly.id/api/social';
+const socialDevUrl = Config.SOCIAL_API_URL;
 
 type CallbackProps = {
   success: (response: any) => void;
@@ -32,7 +34,7 @@ export default {
   },
   getSocial: function (url: string, callback: CallbackProps) {
     axios
-      .get(socialApiUrl + url)
+      .get(socialDevUrl + url)
       .then(response => {
         callback.success(response);
       })
@@ -43,6 +45,53 @@ export default {
   getSocialDev: function (url: string, callback: CallbackProps) {
     axios
       .get(socialDevUrl + url)
+      .then(response => {
+        callback.success(response);
+      })
+      .catch(e => {
+        callback.error(e);
+      });
+  },
+  getSocialHeader: function (url: string, callback: CallbackProps) {
+    axios
+      .get(socialDevUrl + url, {
+        headers: {
+          Authorization: 'Bearer ' + storageService.getToken(),
+        },
+      })
+      .then(response => {
+        callback.success(response);
+      })
+      .catch(e => {
+        callback.error(e);
+      });
+  },
+  postSocial: function (url: string, data: any, callback: CallbackProps) {
+    axios
+      .post(socialDevUrl + url, data, {
+        headers: {
+          Authorization: 'Bearer ' + storageService.getToken(),
+        },
+      })
+      .then(response => {
+        callback.success(response);
+      })
+      .catch(e => {
+        callback.error(e);
+      });
+  },
+  postSocialFormData: function (
+    url: string,
+    data: any,
+    callback: CallbackProps,
+  ) {
+    axios
+      .post(socialDevUrl + url, data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: 'Bearer ' + storageService.getToken(),
+        },
+      })
       .then(response => {
         callback.success(response);
       })
