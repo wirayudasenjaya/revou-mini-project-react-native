@@ -91,6 +91,13 @@ export type RegisterComponentProps = {
     name: string;
     username: string;
   };
+  errorMessage: {
+    email: string;
+    password: string;
+    confirmPassword: string;
+    name: string;
+    username: string;
+  };
   handleInputChange: (key: string, value: string) => void;
   handleInputBlur: (key: string) => void;
   inputStates: Record<string, InputStateProps>;
@@ -117,4 +124,4 @@ export type AuthState = {
   isLoggedIn: boolean;
 };
 
-export type AuthAction = {type: 'LOGIN'} | {type: 'LOGOUT'};
+export type AuthAction = {type: 'LOGIN', payload: string} | {type: 'LOGOUT'};
