@@ -1,10 +1,12 @@
 import {useContext, useEffect, useRef, useState} from 'react';
-import {Image, View} from 'react-native';
+import {Alert, Image, View} from 'react-native';
 import notifee, {EventType} from '@notifee/react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import messaging from '@react-native-firebase/messaging';
+import JailMonkey from 'jail-monkey';
+import RNExitApp from 'react-native-exit-app';
 
 import {StackParams} from '../utils/types';
 import HomeScreen from '../screens/HomeScreen';
@@ -17,6 +19,8 @@ import colors from '../components/constants/colors';
 import Icon from '../components/atom/Icon/Icon';
 import {AuthContext} from '../utils/authContext';
 import RegisterScreen from '../screens/RegisterScreen';
+import Config from 'react-native-config';
+import Typography from '../components/Typography';
 
 export default function AppNavigation() {
   const Stack = createNativeStackNavigator<StackParams>();
@@ -44,11 +48,30 @@ export default function AppNavigation() {
           }
           break;
       }
-    }
+    };
 
     useEffect(() => {
-     notifee.onForegroundEvent(onHandleNotification);
-     notifee.onBackgroundEvent(onHandleNotification);
+      notifee.onForegroundEvent(onHandleNotification);
+      notifee.onBackgroundEvent(onHandleNotification);
+      if (!__DEV__) {
+        if (JailMonkey.isJailBroken()) {
+          Alert.alert(
+            'Error',
+            'This is a jailbroken device',
+            [
+              {
+                text: 'OK',
+                onPress: () => {
+                  RNExitApp.exitApp();
+                },
+              },
+            ],
+            {
+              cancelable: false,
+            },
+          );
+        }
+      }
     }, []);
 
     return null;
@@ -68,7 +91,9 @@ export default function AppNavigation() {
   useEffect(() => {
     if (initialNotification?.type === 'OPEN_POST_DETAIL') {
       // Use navigationRef to navigate
-      navigationRef.current?.navigate('Detail', {id: initialNotification.postId});
+      navigationRef.current?.navigate('Detail', {
+        id: initialNotification.postId,
+      });
       setInitialNotification(null); // Clear the notification data after handling it
     }
   }, [initialNotification]);
@@ -108,26 +133,35 @@ export default function AppNavigation() {
   }
 
   return (
-    <NavigationContainer ref={navigationRef}>
-      <InitNotification />
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}>
-        {state.isLoggedIn ? (
-          <>
-            <Stack.Screen name="HomeTabs" component={HomeTabs} />
-            <Stack.Screen name="Create" component={CreatePostScreen} />
-            <Stack.Screen name="Detail" component={DetailPostScreen} />
-          </>
-        ) : (
-          <>
-            <Stack.Screen name="Onboarding" component={OnboardingScreen} />
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Register" component={RegisterScreen} />
-          </>
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <>
+      <NavigationContainer ref={navigationRef}>
+        <InitNotification />
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+          }}>
+          {state.isLoggedIn ? (
+            <>
+              <Stack.Screen name="HomeTabs" component={HomeTabs} />
+              <Stack.Screen name="Create" component={CreatePostScreen} />
+              <Stack.Screen name="Detail" component={DetailPostScreen} />
+            </>
+          ) : (
+            <>
+              <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+              <Stack.Screen name="Login" component={LoginScreen} />
+              <Stack.Screen name="Register" component={RegisterScreen} />
+            </>
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
+      {Config.ENV === 'staging' && (
+        <View style={{backgroundColor: colors.blue600}}>
+          <Typography type="paragraph" size="medium">
+            STAGING ENV
+          </Typography>
+        </View>
+      )}
+    </>
   );
 }
