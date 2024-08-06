@@ -1,4 +1,4 @@
-import React, {memo, useState, useCallback, useContext} from 'react';
+import React, {memo, useState, useCallback, useContext, useEffect} from 'react';
 import {
   Dimensions,
   SafeAreaView,
@@ -20,6 +20,8 @@ import {UserContext} from '../utils/userContext';
 import {AuthContext} from '../utils/authContext';
 import TrendingList from '../components/organisms/TrendingList';
 import NewestList from '../components/organisms/NewestList';
+import fetch from '../utils/fetch';
+import { storageService } from '../services';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -88,6 +90,18 @@ export default function HomeScreen({navigation}: ScreenProps) {
       navigation.navigate('Create');
     }
   };
+
+  useEffect(() => {
+    fetch.getSocialHeader(`/v2/profile`, {
+      success: async (response) => {
+        storageService.setUsername(response.data.data.username);
+        storageService.setEmail(response.data.data.email)
+      },
+      error: async (error) => {
+        console.log(error.response.data)
+      }
+    });
+  }, [])
 
   return (
     <SafeAreaView style={styles.flexContainer}>

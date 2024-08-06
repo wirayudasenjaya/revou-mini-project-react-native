@@ -2,27 +2,32 @@ import {
   SafeAreaView,
   StyleSheet,
   TextInput,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {Dropdown} from 'react-native-element-dropdown';
+import analytics from '@react-native-firebase/analytics';
 
 import Typography from '../components/Typography';
-import TextField from '../components/molecules/TextInput';
 import {StackParams} from '../utils/types';
 import Icon from '../components/atom/Icon/Icon';
 import colors from '../components/constants/colors';
 import Button from '../components/molecules/Button';
-import {useContext, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {PostContext} from '../utils/postContext';
 import {UserContext} from '../utils/userContext';
+import fetch from '../utils/fetch';
+import { storageService } from '../services';
 
 type ScreenProps = NativeStackScreenProps<StackParams, 'Create'>;
 
 export default function CreatePostScreen({navigation}: ScreenProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [topic, setTopic] = useState('');
+  const [topic, setTopic] = useState([]);
+  const [value, setValue] = useState('');
   const {setPosts} = useContext(PostContext);
   const {user} = useContext(UserContext);
 
@@ -36,23 +41,47 @@ export default function CreatePostScreen({navigation}: ScreenProps) {
   };
 
   const handleCreate = () => {
-    const newPost = {
-      avatar_url:
-        'https://s3-alpha-sig.figma.com/img/b472/1564/b04bd24355d7fcd28e8592df82f22e17?Expires=1721606400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=L0E0VfTzpEVgsylQwpC3zYM~lyQlyt9U0u8WHZAuyXwl70zaw3txFb6zYrY9kfGa~L1dhc947f2AeCZ6Kew81~xQMEK4tnTgwcOUXRqcYYYLbNGsNJPJ-mOSIeFfbLtOJrhgof2nzQRauClb-95GwN8qbe5TTjrlVGrKJUSpRmKvsEXMPoQ5rlA74PSW~ScAXNUTYyM2zpOBuvpBlPFexGDtFC~7a3pm0iyGhhQ0lTFC7rBTcPNMS8tlaooQsEbA3gSPHFDLd3Ia6P5a7Ur244HVSywdf~zdq1JKNrVgiY3CnWmPbq-RDK9S6R1IT8rCFwyr8dzGRBYV-yaw8Q9Z3A__',
-      name: user,
-      headline: 'Software Engineer',
-      created_at: new Date(),
-      post_header: title,
-      post_content: description,
-      post_topic: topic,
-      post_upvote: 0,
-      post_retweet: 0,
-      post_comment: 0,
-    };
-
-    setPosts(prev => [...prev, newPost]);
-    navigation.goBack();
+    const formData = new FormData();
+    formData.append('content', description);
+    formData.append('header', title);
+    formData.append('is_anonim', false);
+    formData.append('topic_id', value);
+    const username = storageService.getUsername();
+    const email = storageService.getEmail();
+    fetch.postSocialFormData(`/v2/post`, formData, {
+      success: async (response) => {
+        await analytics().logEvent('success_create_post', {
+          username: username,
+          email: email
+        });
+        ToastAndroid.show('Success Create Post', ToastAndroid.SHORT);
+        navigation.goBack();
+      },
+      error: async (error) => {
+        await analytics().logEvent('failed_create_post', {
+          username: username,
+          email: email,
+          error_message: error.response.data.message
+        });
+        ToastAndroid.show('Unable to create post', ToastAndroid.SHORT);
+      },
+    });
   };
+
+  useEffect(() => {
+    fetch.getSocialDev(`/v1/public/masterdata/topic`, {
+      success: response => {
+        const list = response.data.data.map(item => ({
+          label: item.label,
+          value: item.id,
+        }));
+        setTopic(list);
+      },
+      error: error => {
+        console.log(error);
+      },
+    });
+  }, []);
 
   return (
     <SafeAreaView style={styles.pageContainer}>
@@ -60,30 +89,40 @@ export default function CreatePostScreen({navigation}: ScreenProps) {
         <TouchableOpacity onPress={() => navigation.navigate('HomeTabs')}>
           <Icon name="chevron-left" width={20} height={20} />
         </TouchableOpacity>
-        <Typography
-          type="heading"
-          size="medium"
-          style={styles.headerTitle}>
+        <Typography type="heading" size="medium" style={styles.headerTitle}>
           Buat
         </Typography>
         <Button
           type="text"
           variant="primary"
           size="small"
-          disabled={title === '' && description === '' && topic === ''}
+          disabled={title === '' || description === '' || value === ''}
           onPress={handleCreate}>
           <Typography type="heading" size="xsmall" style={{color: 'white'}}>
             Post
           </Typography>
         </Button>
       </View>
-      <TextField
+      {/* <TextField
         state="default-no-label"
         type="text"
         placeholder="Topic"
         value={topic}
         onChangeText={text => setTopic(text)}
         onBlur={() => {}}
+      /> */}
+      <Dropdown
+        style={styles.dropdown}
+        data={topic}
+        maxHeight={300}
+        labelField="label"
+        valueField="value"
+        placeholder="Select item"
+        searchPlaceholder="Search..."
+        value={value}
+        onChange={item => {
+          setValue(item.value);
+        }}
       />
       <TextInput
         placeholder="Judul"
@@ -103,7 +142,7 @@ const styles = StyleSheet.create({
   pageContainer: {
     flex: 1,
     padding: 24,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
   },
   topMenu: {
     flexDirection: 'row',
@@ -114,7 +153,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     flex: 1,
-    color: colors.neutral700
+    color: colors.neutral700,
   },
   input: {
     marginTop: 32,
@@ -130,5 +169,21 @@ const styles = StyleSheet.create({
     fontWeight: 'regular',
     lineHeight: 22,
     fontFamily: 'Inter-Regular',
+  },
+  dropdown: {
+    marginVertical: 16,
+    height: 50,
+    backgroundColor: 'white',
+    borderRadius: 12,
+    padding: 12,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+
+    elevation: 2,
   },
 });

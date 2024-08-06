@@ -121,7 +121,7 @@ export default function PostCard({post, onPress}: PostCardProps) {
             size="small"
             type="icon-left"
             disabled={false}
-            onPress={onPress}>
+            onPress={() => {}}>
             <Icon
               name="retweet"
               width={16}
