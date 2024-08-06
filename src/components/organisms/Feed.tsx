@@ -1,14 +1,16 @@
-import { useContext } from 'react';
+import {useContext} from 'react';
 import {
   ActivityIndicator,
   FlatList,
   Image,
   RefreshControl,
   StyleSheet,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
 import dayjs from 'dayjs';
+import analytics from '@react-native-firebase/analytics';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/id';
 
@@ -16,8 +18,10 @@ import Typography from '../Typography';
 import colors from '../constants/colors';
 import {FeedProps} from '../../utils/types';
 import PostCard from './PostCard';
-import { UserContext } from '../../utils/userContext';
-import { AuthContext } from '../../utils/authContext';
+import {UserContext} from '../../utils/userContext';
+import {AuthContext} from '../../utils/authContext';
+import fetch from '../../utils/fetch';
+import { storageService } from '../../services';
 
 export default function Feed({
   data,
@@ -35,6 +39,26 @@ export default function Feed({
   const handleLoginRedirect = () => {
     if (user === 'guest') {
       logout();
+    }
+  };
+
+  const handleUpvote = (post_id: string) => {
+    if (user === 'guest') {
+      logout();
+    } else {
+      const username = storageService.getUsername();
+      fetch.postSocial(`/v2/post/${post_id}/up-vote`, {}, {
+        success: async (response) => {
+          await analytics().logEvent('click_upvote', {
+            username: username,
+            post_id: post_id
+          });
+          ToastAndroid.show('Success Upvote', ToastAndroid.SHORT);
+        },
+        error: async (error) => {
+          ToastAndroid.show(error.response.data.messages, ToastAndroid.SHORT);
+        }
+      });
     }
   };
 
@@ -81,40 +105,41 @@ export default function Feed({
             }
             renderItem={({item, index}) => (
               <TouchableOpacity key={index} onPress={() => viewDetail(item.id)}>
-                <PostCard post={item} onPress={handleLoginRedirect} />
+                <PostCard post={item} onPress={() => handleUpvote(item.id)} />
               </TouchableOpacity>
             )}
           />
         </View>
       )}
-     {(user === 'guest' && !loading) &&  <View
-        style={styles.bottomBanner}>
-        <Image
-          source={require('../../../assets/images/Investly_Mascot_1.png')}
-          style={{width: 40, height: 28}}
-        />
-        <View style={{flexDirection: 'row'}}>
-          <Typography type="paragraph" size="small" style={styles.subtitle}>
-            Temukan inspirasi investasi,
-          </Typography>
-          <TouchableOpacity onPress={handleLoginRedirect}>
-            <Typography
-              type="heading"
-              size="xsmall"
-              style={{color: colors.purple600}}>
-              {' '}
-              Masuk yuk!
+      {user === 'guest' && !loading && (
+        <View style={styles.bottomBanner}>
+          <Image
+            source={require('../../../assets/images/Investly_Mascot_1.png')}
+            style={{width: 40, height: 28}}
+          />
+          <View style={{flexDirection: 'row'}}>
+            <Typography type="paragraph" size="small" style={styles.subtitle}>
+              Temukan inspirasi investasi,
             </Typography>
-          </TouchableOpacity>
+            <TouchableOpacity onPress={handleLoginRedirect}>
+              <Typography
+                type="heading"
+                size="xsmall"
+                style={{color: colors.purple600}}>
+                {' '}
+                Masuk yuk!
+              </Typography>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>}
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   loading: {
-    marginTop: 10
+    marginTop: 10,
   },
   newsCard: {
     borderBottomWidth: 0.5,
@@ -148,5 +173,5 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
-  }
+  },
 });
