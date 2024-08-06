@@ -4328,6 +4328,11 @@ iterator.prototype@^1.1.2:
     reflect.getprototypeof "^1.0.4"
     set-function-name "^2.0.1"
 
+jail-monkey@^2.8.0:
+  version "2.8.0"
+  resolved "https://registry.npmjs.org/jail-monkey/-/jail-monkey-2.8.0.tgz"
+  integrity sha512-mz0sldKOEnt7qpqLLYM9Rwq9zGuGtj5nihz87KWBSy6PR9eu0cmyPkW3b+Exw4iVivcb2bFf6uVq0Q9aNgdIhw==
+
 jest-changed-files@^29.7.0:
   version "29.7.0"
   dependencies:
@@ -5616,10 +5621,27 @@ react-is@^16.13.1:
 react-is@^17.0.1:
   version "17.0.2"
 
+react-native-aes-crypto@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.npmjs.org/react-native-aes-crypto/-/react-native-aes-crypto-3.0.3.tgz"
+  integrity sha512-6yJjAix83xMDMCDUQLVpoHQMkTfeWoKrDXWP2Yrl68o2053aHPk3hTW6sCTYLj5HmftZ9S9DQ3DelP7WVlIDtw==
+
 react-native-config@^1.5.3:
   version "1.5.3"
   resolved "https://registry.npmjs.org/react-native-config/-/react-native-config-1.5.3.tgz"
   integrity sha512-3D05Abgk5DfDw9w258EzXvX5AkU7eqj3u9H0H0L4gUga4nYg/zuupcrpGbpF4QeXBcJ84jjs6g8JaEP6VBT7Pg==
+
+react-native-element-dropdown@^2.12.1:
+  version "2.12.1"
+  resolved "https://registry.npmjs.org/react-native-element-dropdown/-/react-native-element-dropdown-2.12.1.tgz"
+  integrity sha512-Z3uWNFBoezDEsy9AZJxoDc9DxoAdfeprUjaInmbuzYOk6R0Y0UZ659JIalX20XNvrNRWJUfSZwbM94jWYNsIyw==
+  dependencies:
+    lodash "^4.17.21"
+
+react-native-exit-app@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npmjs.org/react-native-exit-app/-/react-native-exit-app-2.0.0.tgz"
+  integrity sha512-vr9e/8jgPcKCBw6qo0QLxfeMiTwExydghbYDqpLZYAGWR+6cbgnhvOxwdYj/JWR7ZtOALrRA4GMGSvU/ayxM7w==
 
 react-native-mmkv@^2.12.2:
   version "2.12.2"
