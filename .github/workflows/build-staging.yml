@@ -27,6 +27,17 @@ jobs:
       
     - name: Make Gradle wrapper executable
       run: chmod +x ./android/gradlew
+
+    - name: Create .env.staging file
+      run: |
+        echo "${{ secrets.ENV_STAGING }}" > .env.staging
+      
+    - name: Create google-services.json
+      run: |
+        echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > ./android/app/google-services.json
+      
+    - name: Set ENVFILE environment variable
+      run: echo "ENVFILE=.env.staging" >> $GITHUB_ENV
       
     - name: Build Android Staging Release
       env:
