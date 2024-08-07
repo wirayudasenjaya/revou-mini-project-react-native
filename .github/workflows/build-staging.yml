@@ -26,7 +26,12 @@ jobs:
       run: npm ci
       
     - name: Build Android app
-      run: npm run build-android:staging
+      env:
+        ENVFILE: .env.staging
+      run: |
+        cd android
+        ./gradlew clean
+        ./gradlew app:assembleStagingRelease
       
     - name: Upload artifact to Firebase App Distribution
       uses: wzieba/Firebase-Distribution-Github-Action@v1
