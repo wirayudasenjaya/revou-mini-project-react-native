@@ -53,4 +53,4 @@ jobs:
         appId: ${{secrets.FIREBASE_APP_ID}}
         serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
         groups: testers
-        file: app/build/outputs/apk/staging/release/app-staging-release.apk
+        file: android/app/build/outputs/apk/staging/release/app-staging-release.apk
