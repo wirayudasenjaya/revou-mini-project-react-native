@@ -14,6 +14,7 @@ type TextInputProps = {
   value: string;
   onChangeText: (text: string) => void;
   onBlur: () => void;
+  onPress?: () => void;
 };
 
 export default function TextField({
@@ -26,6 +27,7 @@ export default function TextField({
   value,
   onChangeText,
   onBlur,
+  onPress,
 }: TextInputProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -69,6 +71,7 @@ export default function TextField({
       </Typography>}
       <View style={[styles.inputTextContainer, getStyleByState()]}>
         <TextInput
+          onPress={onPress}
           secureTextEntry={type === 'password' && isVisible === false}
           editable={state !== 'disabled'}
           placeholder={placeholder}

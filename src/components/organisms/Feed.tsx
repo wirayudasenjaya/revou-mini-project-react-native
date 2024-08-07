@@ -1,4 +1,4 @@
-import {useContext} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -33,8 +33,13 @@ export default function Feed({
 }: FeedProps) {
   const {user} = useContext(UserContext);
   const {logout} = useContext(AuthContext);
+  const [posts, setPosts] = useState(data);
   dayjs.locale('id');
   dayjs.extend(relativeTime);
+
+  useEffect(() => {
+    setPosts(data);
+  }, [data]);
 
   const handleLoginRedirect = () => {
     if (user === 'guest') {
@@ -42,7 +47,7 @@ export default function Feed({
     }
   };
 
-  const handleUpvote = (post_id: string) => {
+  const handleUpvote = (post_id: string, votes: number, is_upvoted: boolean) => {
     if (user === 'guest') {
       logout();
     } else {
@@ -53,6 +58,17 @@ export default function Feed({
             username: username,
             post_id: post_id
           });
+          const updatedData = data.map(post => {
+            if (post.id === post_id) {
+              return {
+                ...post,
+                upvotes: is_upvoted ? votes - 1 : votes + 1,
+                is_upvoted: !is_upvoted
+              };
+            }
+            return post;
+          });
+          setPosts(updatedData)
           ToastAndroid.show('Success Upvote', ToastAndroid.SHORT);
         },
         error: async (error) => {
@@ -77,7 +93,7 @@ export default function Feed({
       ) : (
         <View>
           <FlatList
-            data={data}
+            data={posts}
             showsVerticalScrollIndicator={false}
             nestedScrollEnabled={true}
             onEndReached={onEndReach}
@@ -105,7 +121,7 @@ export default function Feed({
             }
             renderItem={({item, index}) => (
               <TouchableOpacity key={index} onPress={() => viewDetail(item.id)}>
-                <PostCard post={item} onPress={() => handleUpvote(item.id)} />
+                <PostCard post={item} onPress={() => handleUpvote(item.id, item.upvotes, item.is_upvoted)} />
               </TouchableOpacity>
             )}
           />

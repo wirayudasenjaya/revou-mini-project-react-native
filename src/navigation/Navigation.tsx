@@ -133,35 +133,26 @@ export default function AppNavigation() {
   }
 
   return (
-    <>
-      <NavigationContainer ref={navigationRef}>
-        <InitNotification />
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false,
-          }}>
-          {state.isLoggedIn ? (
-            <>
-              <Stack.Screen name="HomeTabs" component={HomeTabs} />
-              <Stack.Screen name="Create" component={CreatePostScreen} />
-              <Stack.Screen name="Detail" component={DetailPostScreen} />
-            </>
-          ) : (
-            <>
-              <Stack.Screen name="Onboarding" component={OnboardingScreen} />
-              <Stack.Screen name="Login" component={LoginScreen} />
-              <Stack.Screen name="Register" component={RegisterScreen} />
-            </>
-          )}
-        </Stack.Navigator>
-      </NavigationContainer>
-      {Config.ENV === 'staging' && (
-        <View style={{backgroundColor: colors.blue600}}>
-          <Typography type="paragraph" size="medium">
-            STAGING ENV
-          </Typography>
-        </View>
-      )}
-    </>
+    <NavigationContainer ref={navigationRef}>
+      <InitNotification />
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}>
+        {state.isLoggedIn ? (
+          <>
+            <Stack.Screen name="HomeTabs" component={HomeTabs} />
+            <Stack.Screen name="Create" component={CreatePostScreen} />
+            <Stack.Screen name="Detail" component={DetailPostScreen} />
+          </>
+        ) : (
+          <>
+            <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Register" component={RegisterScreen} />
+          </>
+        )}
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }

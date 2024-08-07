@@ -112,8 +112,9 @@ export default function HomeScreen({navigation}: ScreenProps) {
             state={user === 'guest' ? 'empty' : 'photo'}
             photo="https://s3-alpha-sig.figma.com/img/b472/1564/b04bd24355d7fcd28e8592df82f22e17?Expires=1721606400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=L0E0VfTzpEVgsylQwpC3zYM~lyQlyt9U0u8WHZAuyXwl70zaw3txFb6zYrY9kfGa~L1dhc947f2AeCZ6Kew81~xQMEK4tnTgwcOUXRqcYYYLbNGsNJPJ-mOSIeFfbLtOJrhgof2nzQRauClb-95GwN8qbe5TTjrlVGrKJUSpRmKvsEXMPoQ5rlA74PSW~ScAXNUTYyM2zpOBuvpBlPFexGDtFC~7a3pm0iyGhhQ0lTFC7rBTcPNMS8tlaooQsEbA3gSPHFDLd3Ia6P5a7Ur244HVSywdf~zdq1JKNrVgiY3CnWmPbq-RDK9S6R1IT8rCFwyr8dzGRBYV-yaw8Q9Z3A__"
           />
-          <View style={styles.cardInputContainer}>
+          <TouchableOpacity style={styles.cardInputContainer}>
             <TextField
+              onPress={createPost}
               state="default-no-label"
               type="text"
               placeholder="Apa yang ingin kamu tanyakan?"
@@ -121,7 +122,7 @@ export default function HomeScreen({navigation}: ScreenProps) {
               onChangeText={() => {}}
               onBlur={() => {}}
             />
-          </View>
+          </TouchableOpacity>
         </View>
         <View style={styles.cardBottomContent}>
           <View style={styles.cardBottomContentButton}>

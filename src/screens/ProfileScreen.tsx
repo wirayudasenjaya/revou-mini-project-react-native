@@ -1,13 +1,6 @@
-import {useContext, useState} from 'react';
-import {Image, StyleSheet, View} from 'react-native';
+import {useContext} from 'react';
+import {StyleSheet, View} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import notifee, {
-  AndroidImportance,
-  TimestampTrigger,
-  TriggerType,
-} from '@notifee/react-native';
-import messaging from '@react-native-firebase/messaging';
-import Aes from 'react-native-aes-crypto';
 
 import Typography from '../components/Typography';
 import colors from '../components/constants/colors';
@@ -24,12 +17,6 @@ export default function ProfileScreen({navigation}: ScreenProps) {
   const handleLogout = () => {
     storageService.logout();
     logout();
-  };
-
-  const onAppBootstrap = async () => {
-    await messaging().registerDeviceForRemoteMessages();
-
-    // messaging().subscribeToTopic('PROMOTIONS');
   };
 
   return (

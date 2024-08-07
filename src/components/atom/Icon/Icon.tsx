@@ -13,7 +13,9 @@ type IconName =
   | 'comment'
   | 'retweet'
   | 'house'
-  | 'paper-plane';
+  | 'paper-plane'
+  | 'paperclip'
+  | 'image';
 
 type IconProps = {
   name: IconName;
@@ -41,6 +43,8 @@ const IconMap: Record<
   retweet: require('./Retweet').default,
   house: require('./House').default,
   'paper-plane': require('./PaperPlane').default,
+  paperclip: require('./Paperclip').default,
+  image: require('./Image').default,
 };
 
 export default function Icon({name, ...props}: IconProps) {

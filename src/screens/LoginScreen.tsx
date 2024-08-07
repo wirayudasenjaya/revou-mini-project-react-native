@@ -1,4 +1,4 @@
-import {useCallback, useContext, useState} from 'react';
+import {useCallback, useContext, useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -10,6 +10,10 @@ import {
 } from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import analytics from '@react-native-firebase/analytics';
+import {
+  GoogleSignin,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
 
 import Typography from '../components/Typography';
 import Button from '../components/molecules/Button';
@@ -42,6 +46,7 @@ export default function LoginScreen({navigation}: ScreenProps) {
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loadingGoogle, setLoadingGoogle] = useState(false);
 
   const handleEmailBlur = () => {
     if (emailRegex.test(email)) {
@@ -85,6 +90,23 @@ export default function LoginScreen({navigation}: ScreenProps) {
       },
     );
   }, [email, password]);
+
+  useEffect(() => {
+    GoogleSignin.configure();
+  }, []);
+
+  const handleGoogleLogin = useCallback(async () => {
+    try {
+      setLoadingGoogle(true);
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      console.log(userInfo);
+      setLoadingGoogle(false);
+    } catch (error) {
+      console.log(error);
+      setLoadingGoogle(false);
+    }
+  }, [])
 
   return (
     <SafeAreaView style={styles.mainBackground}>
@@ -173,6 +195,27 @@ export default function LoginScreen({navigation}: ScreenProps) {
                   textAlign: 'center',
                 }}>
                 Masuk
+              </Typography>
+            )}
+          </Button>
+          <View style={{ marginVertical: 6}} />
+          <Button
+            variant="primary"
+            type="text"
+            size="large"
+            disabled={false}
+            onPress={handleGoogleLogin}>
+            {loadingGoogle ? (
+              <ActivityIndicator size="small" color='white' />
+            ) : (
+              <Typography
+                type="heading"
+                size="medium"
+                style={{
+                  color: colors.neutral100,
+                  textAlign: 'center',
+                }}>
+                Masuk dengan Google
               </Typography>
             )}
           </Button>

@@ -19,7 +19,7 @@ import {useContext, useEffect, useState} from 'react';
 import {PostContext} from '../utils/postContext';
 import {UserContext} from '../utils/userContext';
 import fetch from '../utils/fetch';
-import { storageService } from '../services';
+import {storageService} from '../services';
 
 type ScreenProps = NativeStackScreenProps<StackParams, 'Create'>;
 
@@ -49,19 +49,19 @@ export default function CreatePostScreen({navigation}: ScreenProps) {
     const username = storageService.getUsername();
     const email = storageService.getEmail();
     fetch.postSocialFormData(`/v2/post`, formData, {
-      success: async (response) => {
+      success: async response => {
         await analytics().logEvent('success_create_post', {
           username: username,
-          email: email
+          email: email,
         });
         ToastAndroid.show('Success Create Post', ToastAndroid.SHORT);
         navigation.goBack();
       },
-      error: async (error) => {
+      error: async error => {
         await analytics().logEvent('failed_create_post', {
           username: username,
           email: email,
-          error_message: error.response.data.message
+          error_message: error.response.data.message,
         });
         ToastAndroid.show('Unable to create post', ToastAndroid.SHORT);
       },
@@ -85,55 +85,55 @@ export default function CreatePostScreen({navigation}: ScreenProps) {
 
   return (
     <SafeAreaView style={styles.pageContainer}>
-      <View style={styles.topMenu}>
-        <TouchableOpacity onPress={() => navigation.navigate('HomeTabs')}>
-          <Icon name="chevron-left" width={20} height={20} />
-        </TouchableOpacity>
-        <Typography type="heading" size="medium" style={styles.headerTitle}>
-          Buat
-        </Typography>
-        <Button
-          type="text"
-          variant="primary"
-          size="small"
-          disabled={title === '' || description === '' || value === ''}
-          onPress={handleCreate}>
-          <Typography type="heading" size="xsmall" style={{color: 'white'}}>
-            Post
+      <View style={{flex: 1, padding: 24}}>
+        <View style={styles.topMenu}>
+          <TouchableOpacity onPress={() => navigation.navigate('HomeTabs')}>
+            <Icon name="chevron-left" width={20} height={20} />
+          </TouchableOpacity>
+          <Typography type="heading" size="medium" style={styles.headerTitle}>
+            Buat
           </Typography>
-        </Button>
+          <Button
+            type="text"
+            variant="primary"
+            size="small"
+            disabled={title === '' || description === '' || value === ''}
+            onPress={handleCreate}>
+            <Typography type="heading" size="xsmall" style={{color: 'white'}}>
+              Post
+            </Typography>
+          </Button>
+        </View>
+        <Dropdown
+          style={styles.dropdown}
+          data={topic}
+          maxHeight={300}
+          labelField="label"
+          valueField="value"
+          placeholder="Select item"
+          searchPlaceholder="Search..."
+          value={value}
+          onChange={item => {
+            setValue(item.value);
+          }}
+        />
+        <TextInput
+          placeholder="Judul"
+          style={[getTypography('title'), styles.input]}
+          onChangeText={value => setTitle(value)}
+        />
+        <TextInput
+          placeholder="Deskripsi"
+          style={[getTypography('description'), styles.input]}
+          onChangeText={value => setDescription(value)}
+        />
       </View>
-      {/* <TextField
-        state="default-no-label"
-        type="text"
-        placeholder="Topic"
-        value={topic}
-        onChangeText={text => setTopic(text)}
-        onBlur={() => {}}
-      /> */}
-      <Dropdown
-        style={styles.dropdown}
-        data={topic}
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder="Select item"
-        searchPlaceholder="Search..."
-        value={value}
-        onChange={item => {
-          setValue(item.value);
-        }}
-      />
-      <TextInput
-        placeholder="Judul"
-        style={[getTypography('title'), styles.input]}
-        onChangeText={value => setTitle(value)}
-      />
-      <TextInput
-        placeholder="Deskripsi"
-        style={[getTypography('description'), styles.input]}
-        onChangeText={value => setDescription(value)}
-      />
+      <View style={styles.bottomContainer}>
+        <View style={styles.bottomIconContainer}>
+          <Icon name='image' width={20} height={20} fill={colors.neutral600} />
+          <Icon name='paperclip' width={20} height={20} fill={colors.neutral600} />
+        </View>
+      </View>
     </SafeAreaView>
   );
 }
@@ -141,7 +141,6 @@ export default function CreatePostScreen({navigation}: ScreenProps) {
 const styles = StyleSheet.create({
   pageContainer: {
     flex: 1,
-    padding: 24,
     backgroundColor: 'white',
   },
   topMenu: {
@@ -183,7 +182,17 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.2,
     shadowRadius: 1.41,
-
     elevation: 2,
   },
+  bottomContainer: {
+    borderTopWidth: 1,
+    borderTopColor: colors.neutral300
+  },
+  bottomIconContainer: {
+    flexDirection: 'row',
+    gap: 20,
+    paddingTop: 12,
+    paddingBottom: 16,
+    paddingHorizontal: 24
+  }
 });
