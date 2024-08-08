@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Revou Staging App</string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">UfnHjt4roHkqgaI6I6ih0GGQ0WKRSqHKk3w9s</string>
 </resources>
