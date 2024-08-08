@@ -13,7 +13,7 @@ import {
   View,
 } from 'react-native';
 import analytics from '@react-native-firebase/analytics';
-import notifee, { AndroidImportance } from '@notifee/react-native';
+import notifee, {AndroidImportance} from '@notifee/react-native';
 
 import Typography from '../components/Typography';
 import ChevronLeft from '../components/atom/Icon/ChevronLeft';
@@ -22,7 +22,12 @@ import colors from '../components/constants/colors';
 import Button from '../components/molecules/Button';
 import {RegisterComponents} from '../components/organisms/Register';
 import fetch from '../utils/fetch';
-import {InputStateProps, RegisterDataProps, StackParams, TopicProps} from '../utils/types';
+import {
+  InputStateProps,
+  RegisterDataProps,
+  StackParams,
+  TopicProps,
+} from '../utils/types';
 import {storageService} from '../services';
 import {AuthContext} from '../utils/authContext';
 import ProgressBar from '../components/molecules/ProgressBar';
@@ -72,36 +77,86 @@ export default function RegisterScreen({navigation}: ScreenProps) {
   const {width} = useWindowDimensions();
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  const debounce = (func, delay: number) => {
+    let timeoutId: NodeJS.Timeout | undefined;
+
+    return (...args) => {
+      clearTimeout(timeoutId);
+
+      timeoutId = setTimeout(() => {
+        func.apply(this, args);
+      }, delay);
+    };
+  };
+
+  const fetchUsername = () => {
+    fetch.getSocialDev(`/v1/public/username/${registerData.username}`, {
+      success: response => {
+        setInputStates(prevStates => ({
+          ...prevStates,
+          username: 'negative',
+        }));
+        setErrorMessage(prevStates => ({
+          ...prevStates,
+          username: response.data.messages,
+        }));
+        setIsValid(prevValid => ({...prevValid, username: false}));
+      },
+      error: () => {
+        setInputStates(prevStates => ({
+          ...prevStates,
+          username: 'positive',
+        }));
+        setIsValid(prevValid => ({...prevValid, username: true}));
+      },
+    });
+  };
+
   const handleInputChange = useCallback(
     (key: keyof RegisterDataProps, value: string) => {
       setRegisterData(prev => ({...prev, [key]: value}));
-      
+
       if (key === 'email') {
         if (!emailRegex.test(value)) {
           setInputStates(prevStates => ({...prevStates, email: 'negative'}));
-          setErrorMessage(prevStates => ({...prevStates, email: 'Format Email Tidak Sesuai'}));
+          setErrorMessage(prevStates => ({
+            ...prevStates,
+            email: 'Format Email Tidak Sesuai',
+          }));
         } else {
           setInputStates(prevStates => ({...prevStates, email: 'positive'}));
           setErrorMessage(prevStates => ({...prevStates, email: ''}));
         }
       }
-      
+
       if (key === 'password') {
         if (!passwordRegex.test(value)) {
           setInputStates(prevStates => ({...prevStates, password: 'negative'}));
-          setErrorMessage(prevStates => ({...prevStates, password: 'Format Password Tidak Sesuai'}));
+          setErrorMessage(prevStates => ({
+            ...prevStates,
+            password: 'Format Password Tidak Sesuai',
+          }));
         } else {
           setInputStates(prevStates => ({...prevStates, password: 'positive'}));
           setErrorMessage(prevStates => ({...prevStates, password: ''}));
         }
       }
-      
+
       if (key === 'confirmPassword') {
         if (value !== registerData.password || !passwordRegex.test(value)) {
-          setInputStates(prevStates => ({...prevStates, confirmPassword: 'negative'}));
-          setErrorMessage(prevStates => ({...prevStates, confirmPassword: 'Konfirmasi Password Tidak Sesuai'}));
+          setInputStates(prevStates => ({
+            ...prevStates,
+            confirmPassword: 'negative',
+          }));
+          setErrorMessage(prevStates => ({
+            ...prevStates,
+            confirmPassword: 'Konfirmasi Password Tidak Sesuai',
+          }));
         } else {
-          setInputStates(prevStates => ({...prevStates, confirmPassword: 'positive'}));
+          setInputStates(prevStates => ({
+            ...prevStates,
+            confirmPassword: 'positive',
+          }));
           setErrorMessage(prevStates => ({...prevStates, confirmPassword: ''}));
         }
       }
@@ -109,11 +164,19 @@ export default function RegisterScreen({navigation}: ScreenProps) {
       if (key === 'name') {
         if (registerData.name.trim().length >= 3) {
           setInputStates(prevStates => ({...prevStates, name: 'negative'}));
-          setErrorMessage(prevStates => ({...prevStates, name: 'Nama harus memiliki minimal 3 karakter'}));
+          setErrorMessage(prevStates => ({
+            ...prevStates,
+            name: 'Nama harus memiliki minimal 3 karakter',
+          }));
         } else {
           setInputStates(prevStates => ({...prevStates, name: 'positive'}));
           setErrorMessage(prevStates => ({...prevStates, name: ''}));
         }
+      }
+
+      if (key === 'username') {
+        const debouncedFunction = debounce(fetchUsername, 500);
+        debouncedFunction();
       }
     },
     [registerData.password],
@@ -141,14 +204,20 @@ export default function RegisterScreen({navigation}: ScreenProps) {
                   email: 'negative',
                 }));
                 setIsValid(prevValid => ({...prevValid, email: false}));
-                setErrorMessage(prevStates => ({...prevStates, email: error.response.data.messages}))
+                setErrorMessage(prevStates => ({
+                  ...prevStates,
+                  email: error.response.data.messages,
+                }));
                 analytics().logEvent('failed_validate_register_email');
               },
             },
           );
         } else {
           setInputStates(prevStates => ({...prevStates, email: 'negative'}));
-          setErrorMessage(prevStates => ({...prevStates, email: 'Format Email Tidak Sesuai'}));
+          setErrorMessage(prevStates => ({
+            ...prevStates,
+            email: 'Format Email Tidak Sesuai',
+          }));
           setIsValid(prevValid => ({...prevValid, email: false}));
         }
       } else {
@@ -165,7 +234,10 @@ export default function RegisterScreen({navigation}: ScreenProps) {
                 ...prevStates,
                 password: 'negative',
               }));
-              setErrorMessage(prevStates => ({...prevStates, password: 'Format Password Tidak Sesuai'}));
+              setErrorMessage(prevStates => ({
+                ...prevStates,
+                password: 'Format Password Tidak Sesuai',
+              }));
               setIsValid(prevValid => ({...prevValid, password: false}));
             }
             break;
@@ -184,7 +256,10 @@ export default function RegisterScreen({navigation}: ScreenProps) {
                 ...prevStates,
                 confirmPassword: 'negative',
               }));
-              setErrorMessage(prevStates => ({...prevStates, confirmPassword: 'Konfirmasi Password Tidak Sesuai'}));
+              setErrorMessage(prevStates => ({
+                ...prevStates,
+                confirmPassword: 'Konfirmasi Password Tidak Sesuai',
+              }));
               setIsValid(prevValid => ({...prevValid, confirmPassword: false}));
             }
             break;
@@ -200,7 +275,10 @@ export default function RegisterScreen({navigation}: ScreenProps) {
                 ...prevStates,
                 name: 'negative',
               }));
-              setErrorMessage(prevStates => ({...prevStates, name: 'Nama harus memiliki minimal 3 karakter'}));
+              setErrorMessage(prevStates => ({
+                ...prevStates,
+                name: 'Nama harus memiliki minimal 3 karakter',
+              }));
               setIsValid(prevValid => ({...prevValid, name: false}));
             }
             break;
@@ -210,24 +288,7 @@ export default function RegisterScreen({navigation}: ScreenProps) {
                 ...prevStates,
                 username: 'default',
               }));
-              fetch.getSocialDev(`/v1/public/username/${registerData.username}`, {
-                success: response => {
-                  console.log(response.data)
-                  setInputStates(prevStates => ({
-                    ...prevStates,
-                    username: 'negative',
-                  }));
-                  setErrorMessage(prevStates => ({...prevStates, username: response.data.messages}));
-                  setIsValid(prevValid => ({...prevValid, username: false}));
-                },
-                error: () => {
-                  setInputStates(prevStates => ({
-                    ...prevStates,
-                    username: 'positive',
-                  }));
-                  setIsValid(prevValid => ({...prevValid, username: true}));
-                },
-              });
+              fetchUsername();
             } else {
               setInputStates(prevStates => ({
                 ...prevStates,
@@ -245,7 +306,7 @@ export default function RegisterScreen({navigation}: ScreenProps) {
     const channelId = await notifee.createChannel({
       id: 'default-test',
       name: 'Default Channel',
-      importance: AndroidImportance.HIGH
+      importance: AndroidImportance.HIGH,
     });
 
     await notifee.displayNotification({
@@ -258,111 +319,114 @@ export default function RegisterScreen({navigation}: ScreenProps) {
           id: 'default',
         },
       },
-      data: {
-        type: 'REGISTER_SUCCESS',
-      }
     });
   };
 
-  const handleNextStep = useCallback(async (index: number) => {
-    switch (index) {
-      case 0:
-        flatListRef.current?.scrollToIndex({
-          animated: true,
-          index: currentIndex + 1,
-        });
-        setCurrentIndex(currentIndex + 1);
-        await analytics().logEvent('click_register_button_step_1', {
-          email: registerData.email,
-        });
-        break;
-      case 1:
-        flatListRef.current?.scrollToIndex({
-          animated: true,
-          index: currentIndex + 1,
-        });
-        setCurrentIndex(currentIndex + 1);
-        await analytics().logEvent('click_register_button_step_2', {
-          email: registerData.email,
-          name: registerData.name,
-          username: registerData.username,
-        });
-        break;
-      case 2:
-        setLoading(true);
-        await analytics().logEvent('click_register_button_step_3', {
-          email: registerData.email,
-          name: registerData.name,
-          username: registerData.username,
-          topic_id: selectedTopic.map(topic => topic.id),
-          topic_name: selectedTopic.map(topic => topic.label)
-        });
-        const insertValue = {
-          email: registerData.email,
-          password: registerData.password,
-          favorite_topic_ids: selectedTopic.map(topic => topic.id),
-          username: registerData.username,
-          name: registerData.name,
-        };
-        fetch.postAuth('/v4/register', insertValue, {
-          success: async (response) => {
-            await analytics().logEvent('success_register_account', {
-              email: registerData.email,
-              name: registerData.name,
-              username: registerData.username,
-              topic_id: selectedTopic.map(topic => topic.id),
-              topic_name: selectedTopic.map(topic => topic.label)
-            });
-            await handleDisplayNotification();
-            storageService.login();
-            storageService.setToken(response.data.data.access_token)
-            login(response.data.data.access_token);
-          },
-          error: async (error) => {
-            await analytics().logEvent('failed_register_account', {
-              email: registerData.email,
-              name: registerData.name,
-              username: registerData.username,
-              topic_id: selectedTopic.map(topic => topic.id),
-              topic_name: selectedTopic.map(topic => topic.label),
-              error_message: error.response.data.messages
-            });
-            Alert.alert('Register Error', error.response.data.messages);
-            setLoading(false);
-          },
-        });
-        break;
-    }
-  }, [currentIndex, registerData, selectedTopic]);
+  const handleNextStep = useCallback(
+    async (index: number) => {
+      switch (index) {
+        case 0:
+          flatListRef.current?.scrollToIndex({
+            animated: true,
+            index: currentIndex + 1,
+          });
+          setCurrentIndex(currentIndex + 1);
+          await analytics().logEvent('click_register_button_step_1', {
+            email: registerData.email,
+          });
+          break;
+        case 1:
+          flatListRef.current?.scrollToIndex({
+            animated: true,
+            index: currentIndex + 1,
+          });
+          setCurrentIndex(currentIndex + 1);
+          await analytics().logEvent('click_register_button_step_2', {
+            email: registerData.email,
+            name: registerData.name,
+            username: registerData.username,
+          });
+          break;
+        case 2:
+          setLoading(true);
+          await analytics().logEvent('click_register_button_step_3', {
+            email: registerData.email,
+            name: registerData.name,
+            username: registerData.username,
+            topic_id: selectedTopic.map(topic => topic.id),
+            topic_name: selectedTopic.map(topic => topic.label),
+          });
+          const insertValue = {
+            email: registerData.email,
+            password: registerData.password,
+            favorite_topic_ids: selectedTopic.map(topic => topic.id),
+            username: registerData.username,
+            name: registerData.name,
+          };
+          fetch.postAuth('/v4/register', insertValue, {
+            success: async response => {
+              await analytics().logEvent('success_register_account', {
+                email: registerData.email,
+                name: registerData.name,
+                username: registerData.username,
+                topic_id: selectedTopic.map(topic => topic.id),
+                topic_name: selectedTopic.map(topic => topic.label),
+              });
+              handleDisplayNotification();
+              storageService.login();
+              storageService.setToken(response.data.data.access_token);
+              login(response.data.data.access_token);
+            },
+            error: async error => {
+              await analytics().logEvent('failed_register_account', {
+                email: registerData.email,
+                name: registerData.name,
+                username: registerData.username,
+                topic_id: selectedTopic.map(topic => topic.id),
+                topic_name: selectedTopic.map(topic => topic.label),
+                error_message: error.response.data.messages,
+              });
+              Alert.alert('Register Error', error.response.data.messages);
+              setLoading(false);
+            },
+          });
+          break;
+      }
+    },
+    [currentIndex, registerData, selectedTopic],
+  );
 
   const handleOnMomentumEnd = useCallback((e: any) => {
     setCurrentIndex(Math.round(e.nativeEvent.contentOffset.x / screenWidth));
   }, []);
 
-  const handleSelectedTopic = useCallback(({id, label}: {id: string, label: string}) => {
-    setSelectedTopic((prevSelected: TopicProps[]) => {
-      if (prevSelected.some((topic: TopicProps) => topic.id === id)) {
-        analytics().logEvent('click_register_unselect_topic', {
-          email: registerData.email,
-          name: registerData.name,
-          username: registerData.username,
-          topic_id: id,
-          topic_name: label
-        });
-        return prevSelected.filter((topic: TopicProps) => topic.id !== id);
-      } else if (prevSelected.length < 3) {
-        analytics().logEvent('click_register_select_topic', {
-          email: registerData.email,
-          name: registerData.name,
-          username: registerData.username,
-          topic_id: id,
-          topic_name: label
-        });
-        return [...prevSelected, {id, label}];
-      }
-      return prevSelected;
-    });
-  }, []);
+  const handleSelectedTopic = useCallback(
+    ({id, label}: {id: string; label: string}) => {
+      setSelectedTopic((prevSelected: TopicProps[]) => {
+        if (prevSelected.some((topic: TopicProps) => topic.id === id)) {
+          analytics().logEvent('click_register_unselect_topic', {
+            email: registerData.email,
+            name: registerData.name,
+            username: registerData.username,
+            topic_id: id,
+            topic_name: label,
+          });
+          return prevSelected.filter((topic: TopicProps) => topic.id !== id);
+        } else if (prevSelected.length < 3) {
+          analytics().logEvent('click_register_select_topic', {
+            email: registerData.email,
+            name: registerData.name,
+            username: registerData.username,
+            topic_id: id,
+            topic_name: label,
+          });
+          return [...prevSelected, {id, label}];
+        }
+        return prevSelected;
+      });
+    },
+    [],
+  );
 
   const handleButtonDisable = useCallback(() => {
     switch (currentIndex) {
@@ -418,29 +482,33 @@ export default function RegisterScreen({navigation}: ScreenProps) {
                         <ChevronLeft />
                       </TouchableOpacity>
                     </View>
-                    <View style={{flex: 1, alignItems: 'center'}}>
-                      <InvestlyLogo width={24} height={24} />
-                    </View>
-                    <View style={{flex: 1, alignItems: 'flex-end'}}>
-                      <Button
-                        variant="link"
-                        type="text"
-                        size="small"
-                        disabled={false}
-                        onPress={() => {
-                          navigation.navigate('Login');
-                        }}>
-                        <Typography
-                          type="heading"
-                          size="xsmall"
-                          style={{
-                            textAlign: 'center',
-                            color: colors.purple600,
-                          }}>
-                          Masuk
-                        </Typography>
-                      </Button>
-                    </View>
+                    {currentIndex === 0 && (
+                      <>
+                        <View style={{flex: 1, alignItems: 'center'}}>
+                          <InvestlyLogo width={24} height={24} />
+                        </View>
+                        <View style={{flex: 1, alignItems: 'flex-end'}}>
+                          <Button
+                            variant="link"
+                            type="text"
+                            size="small"
+                            disabled={false}
+                            onPress={() => {
+                              navigation.navigate('Login');
+                            }}>
+                            <Typography
+                              type="heading"
+                              size="xsmall"
+                              style={{
+                                textAlign: 'center',
+                                color: colors.purple600,
+                              }}>
+                              Masuk
+                            </Typography>
+                          </Button>
+                        </View>
+                      </>
+                    )}
                   </View>
                   <Typography type="heading" size="large" style={styles.title}>
                     {item.title}
